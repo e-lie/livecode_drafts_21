@@ -51,19 +51,26 @@ Scale.default = Scale.minor
 
 line = var([0,1,0,2], PDur(3,8))
 
-Clock.bpm=140
+change_bpm(140)
+change_bpm(200)
 
 b1 >> acidbass(degree=P[1,None,1,1]*line, curve=linvar([-1,1], 8), dur=PDur(3,8), oct=3, sus=.2, amp=1, lagtime=linvar([0,.3],16), frange=linvar([0,7],8), pan=[-.5,.5])
-b3 >> space(degree=line, curve=linvar([-1,1], 8), dur=.25, oct=[6,7,6,5], amp=1, pan=[-.5,.5], sus=linvar([.1,1],16))
-b2 >> play("<v.><(xX).>", output=12, amp=2.5, sample=2)
+b3 >> wobble(line, oct=(3,4), dur=4).fadein(fvol=.8)
+b3.stop()
+
+
+l3 >> space(degree=line, curve=linvar([-1,1], 8), dur=.25, oct=[6,7,6,5], amp=1, pan=[-.5,.5], sus=linvar([.1,1],16))
+b2 >> play("<v.><(xX).>", output=12, amp=1.5, sample=2)
 d2 >> play(".(*.*([**][.*][**][*****]))", output=12, amp=5, rate=[2,3,4], sample=2)
 d2 >> play("[***]([**]i=.)", output=12, amp=4, rate=2, sample=2)
+d2 >> play(".*", rate=2)
+d2.stop()
 
 
-b3 >> wobble(line, oct=(3,6), dur=4).fadein(fvol=.8)
 
 sn >> play("<..i.><..o.>", dur=.5, sdb=1, lpf=20000, rate=1.3, sample=3, amp=4)
 hh >> play("-", dur=.5, sdb=1, sample=0, rate=1.6, amp=2.5, room2=5)
+
 k1 >> play(
     Pvar(vessel_kicks, 4),
     # vessel_kicks[1],
@@ -75,6 +82,14 @@ k1 >> play(
     rate=1,
     amp=2.8,
     output=12,
-    )
+)
 # k1.every(16,"stutter") # TODO fix that !!
 k1.amp=4
+
+b2.stop()
+
+Clock.bpm = linvar([140, 170], 32, start=Clock.mod(4))
+
+change_bpm(170)
+
+k1.stop()
