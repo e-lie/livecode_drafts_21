@@ -1,3 +1,7 @@
+# Ici ajouter une partie techno non mélodique au début puis faire rentrer la mélodies
+# gros kicks rumble hadone like ?
+# ajouter des stabs ???
+
 Clock.clear()
 
 Root.default = 0

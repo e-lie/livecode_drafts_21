@@ -2,7 +2,7 @@ Clock.clear()
 
 from FoxDot.preset import *
 
-fxstack, rdrum = add_chains("effects/fxstack_1", "drum/rdrum_1")
+fxstack, memory_leak = add_chains("effects/fxstack_1", "synth_keys/memory_leak_1")
 bass303, gone = add_chains("bass/bass303_1", "pads/gone_1")
 apad, marimba = add_chains("pads/apad_1", "mallets/marimba_1")
 lavitar, pharao = add_chains("synth_keys/lavitar_1", "synth_keys/pharao_1")
@@ -10,38 +10,33 @@ pluckbass, equals = add_chains("bass/pluckbass_1", "synth_keys/equals_1")
 dakeys, padarp = add_chains("synth_keys/dakeys_1", "synth_keys/padarp_1")
 sizzle, keypong = add_chains("synth_keys/sizzle_1", "synth_keys/keypong_1")
 wobble, reese = add_chains("bass/wobble_1", "bass/reese_1")
-# darkpass, hpluck, acidbb = add_chains("darkpass", "hpluck1")
-
-# rdrum, bpiano = add_chains("drum/rdrum_1", "synth_keys/bpiano_1")
 
 Clock.latency = .5
 Clock.midi_nudge = -.235 # latency 1024/48000
-# Clock.midi_nudge = -.212 # latency 256/48000
 
-# def shift_clock(time, shift, factor=24):
-#     time *= factor
-#     shift *= factor
-#     return max(time-shift,0)
-# cshift = 1000
-# cshift = 0
-
-change_bpm(170)
-
-b1 >> gone(vol=0, oct=3)
-
-################################################################
 
 change_bpm(130)
-cc >> play("t", dur=1, rate=[1], pan=0, amp=[1], output=14)
-cc.always_on = True
-
 Root.default = 0
+tt >> fxstack(ru_on=False, ens_on=False, vdee_on=False, sm_on=False, deda_on=False)
 Scale.default = Scale.major
 pitches = [0, 2, 5, 2, 0, -2, 5, 4]
 
-################################################################
-############      Intro Ambient
-################################################################
+a1 >> apad(
+    P[0, 4, -2],
+    dur=P[5,3,8]*2,
+    attack=.8,
+    space=0,
+    detail=0,
+    thick_thin=0,
+    oct=5,
+)
+# a1.span(srot(128), .8)
+a1.fadein(16, fvol=.7)
+a1.thick_thin=linvar([0,1,.4,.8,0,.6], PRand(2,24), start=Clock.mod(4))
+a1.degree = P[0,4,-2] + P(0,4,5)
+
+k1 >> play("..(...x)(...(.X))", dur=.25, lpf=900, output=12)
+k1.fadein(16)
 
 s1 >> pharao(
     [0],
@@ -51,127 +46,109 @@ s1 >> pharao(
     cutoff = .8,
     level=.3,
 )
-s1.fadein(16, fvol=1.8, ivol=0)
+s1.fadein(16, fvol=1.8)
 # s1.span(srot(48),.6)
-
-a1 >> apad(
-    P[0, 4, -2],
-    dur=PRand(4, 8)[:16],
-    vol=1,
-    attack=.5,
-    space=0,
-    detail=0,
-    thick_thin=0,
-    oct=5,
-)
-# a1.span(srot(128), .8)
-a1.fadein(16)
-a1.thick_thin=linvar([0,1,.4,.8,0,.6], PRand(2,24), start=Clock.mod(4))
-
-a1.degree = P[0,4,-2] + P(0,4,5)
 
 a1.space=linvar([0,1,.4,.8,0,.6],PRand(2,24), start=Clock.mod(4))
 
-a1.detail=linvar([0,1,.4,.8,0,.6],PRand(2,24), start=Clock.mod(4))
-
-Root.default = var([0,2,4], 1)
+k1.degree = "(V...).(...x)(...(.X))"
 
 a4 >> gone([0], dur=4, body=0, arp=0, pitch=0, oct=5, dull=linvar([0,1,.4,.8,0,.6],PRand(2,24), start=Clock.mod(4)))
-a4.fadein(32, fvol=.6)
-
-a4.stop()
-
-
-a1.fadeout(16, ivol=1, fvol=.8)
-# a4.span(srot(64), .4)
-
-################################################################
-############      Entrée Batterie
-################################################################
-
 a4.oct = 3
+a4.fadein(32, fvol=.6)
+a1.detail=linvar([0,1,.4,.8,0,.6],PRand(2,24), start=Clock.mod(4))
+Scale.default = Pvar([Scale.minor, Scale.major], 32, start=Clock.mod(4))
 
-Root.default = var([0,2,4], 2)
+cc >> play("..(*.)(.*)", dur=.25, rate=var([3,4]), amp=2.3, room2=0, hpf=700, lpf=2000, sample=4)
+cc.fadein(24)
+
+a1.fade(16, fvol=.8)
+k1.degree = "(V).(...x)(...(.X))"
+k1.pause(8,64)
+Scale.default = Scale.majorPentatonic
+
+k1.sample=var([0,1,2],64)
 
 a4.body = linvar([0,1,.4,.8,0,.6],PRand(2,24), start=Clock.mod(4))
 
 a4.pitch = linvar([0,1,.4,.8,0,.6],PRand(2,24), start=Clock.mod(4))
 
+a4.oct = 4
 a4.arp = linvar([0,1,.4,.8,0,.6],PRand(2,24), start=Clock.mod(4))
 
-a4.fadeout(64, ivol=1, fvol=.8)
+cp >> play(".(.**.)(.*..)(...(.O))", dur=.25, lpf=8000, hpf=1000, amp=2, rate=2)
 
-a1.oct = Pvar([5,(4,5),P*(4,6)], 2) - 2
-a1.degree = Pvar([P[0, 4, -2], P[0, 4, -2]+P(0,4,5)], 16)
+cc.fadeout(24)
 
-Root.default = 0
+a4.fade(32, fvol=.4)
 
-################################################################
-############      Première forme
-################################################################
+a1.fade(24, fvol=.3)
 
-a4.fadeout(16, ivol=.8, fvol=.5)
+Scale.default = Scale.minor
 
 s1.dur = .5
-s1.amp=1.7
 s1.level=.5
 s1 + P(0,5)
 
-################################################################
-############      Rythmiser les cymbales
-################################################################
-
 pitches = [0, 2, 5, 2, 0, -2, 5, 4]
+
+pitches = var([0, 2, 5, 2, 0, -2, 5, 4],[1,1,2,.5,.5,.5,.5,.5])
 s1.degree = pitches
 s1.vol=1.8
 s1.level=.5
+s1.dur=.5
+
 s1.dur = Pvar([[.5,.25,.25],.5], 32, start=Clock.mod(4))
+s1.amp = [1,1,0,0]
 
-### Pas trop vite ici
+cp >> play(".(.**.)(**.-)(..(O.)(.O))", dur=.25, lpf=8000, hpf=1000, amp=2, rate=2)
 
-################################################################
-############      Entrée kick puis Toms batterie
-################################################################
+hh >> play("..(---(---(ib)))(.-)", sdb=1, amp=2, rate=1.2, dur=.25, sample=6)
 
 k1 >> play(
     degree="V...",
     pdb=2,
     output=12,
-    sample=4,
+    sample=8,
     room2=.1,
-    lpf=200,
+    lpf=400,
+    amp=2,
 )
-k1.ampfadein(24, iamp=0, famp=.7)
+k1.fadein(24, fvol=.7)
+
+k1 >> play("V.(v)(...(.X))", dur=.25, lpf=900, output=12, amp=1.5)
 
 k1.lpf = linvar([200,800], [32,inf], start=Clock.mod(4))
+
 k1.degree = "<V.x.>"
 
 k1.degree = "<V.x.><..[(...X)X]>"
 
-# a1.span(.5)
-
 k1.degree = "<V.x.><.(..[XV])[(...X)X]>"
 
-s1.fadeout(16, ivol=1.7, fvol=1)
+k1.lpf = 800
 
-s1.fadein(32, ivol=1, fvol=1.4)
+s1.fade(16, fvol=.5)
+
+s1.fade(32, fvol=1.4)
 s1.oct=(5,6)
 s1.cutoff=linvar([1,.4],32, start=Clock.mod(4))
-# s1.level=.3
-# s1.vol=.8
-# s1.span(.5)
 
 a4.pitch = 0
 a4.arp = 0
 
 Scale.default = Scale.minor
 
-a4.fadeout(ivol=.5, dur=16)
+a4.fadeout(16)
 s1 + (0,2)
 
 k1.degree = Pvar(["V.x.","<V.x.><.(..[XV])[(...X)X]>"],16, start=Clock.mod(4))
 k1.pause(8,48)
 a4.stop()
+
+a4.curr_players()
+a1.fadeout()
+k1.fadeout(ivol=None)
 
 ################################################################
 ############      Entrée caisse claire
@@ -180,13 +157,13 @@ a4.stop()
 s2 >> blip(
     [0],
     dur=P[.5, .25, .25],
-    amp=P[.7, .8, .9, 1, 1.1, 1, .9, .8] * 2,
+    amp=P[.7, .8, .9, 1, 1.1, 1, .9, .8] * 1,
     pan=[-1,0,1,0],
     oct=[5, 7, 6, 7],
     sus=linvar([.3, 2], [48], start=Clock.mod(4)),
 )
 # s2.mpan(mrot(64))
-s2.fadein(16, fvol=1)
+s2.fadein(16, fvol=1.2)
 
 # s1.span(srot(48))
 s1.dur=P[P[.5, .5, .5, P*(.25,.25)],.25,.25]
@@ -216,6 +193,8 @@ Root.default = var(PTri(12), 8, start=Clock.mod(4))
 
 k1.degree = Pvar(["V.x.","<V.x.><.(..[XV])[(...X)X]>"],16, start=Clock.mod(4))
 
+k1.amp=1.2
+
 s2.degree = pitches
 
 s2.oct=(4,6)
@@ -243,7 +222,6 @@ s1.fadeout(24, ivol=1, fvol=.8)
 ############      Deuxieme forme
 ################################################################
 
-
 a4 >> gone([0], dur=4, body=0, arp=0, pitch=0, oct=5, dull=linvar([0,1,.4,.8,0,.6],PRand(2,24), start=Clock.mod(4)))
 a4.fadein(32, fvol=.8)
 # a4.span(srot(64), .4)
@@ -261,6 +239,7 @@ s3 >> space(
     room2=.5,
     oct=Pvar([(4,5), 3, (3,4,5)], [2,4,3,3]),
 )
+s3.pause(8,24,smooth=.3)
 
 s2 >> blip(
     [0,2],
@@ -272,13 +251,13 @@ s2 >> blip(
     oct=[5, 7, 6, 7, 5, 6],
     sus=linvar([.3, 2], [48], start=Clock.mod(4)),
 )
-s2.ampfadein(16, famp=1)
+s2.fadein(16)
+s2.pause(8,24,8,smooth=.3)
 
 s3.dur=P[P[.5, .5, .5, P*(.25,.25)],.25,.25]
 
 k1.stop()
 s1.stop()
-
 
 p2 >> padarp(
     [0, 2],
@@ -287,11 +266,16 @@ p2 >> padarp(
     amp=.8,
     verb=0,
     delay=0,
-    detune=sinvar([0,1], PWhite(.2,3)[:16], start=Clock.mod(4)),
-    # detune=0,
+    # detune=sinvar([0,1], PWhite(.2,3)[:16], start=Clock.mod(4)),
+    detune=0,
     expand=0,
     vol=1.2,
+    filter_fx_switch=1,
+    # filter_fx_cutoff=0,
+    filter_fx_cutoff=linvar([.2,.6],[32,inf], start=Clock.mod(4))
 )
+b1.fadein(4)
+
 # p2.span(srot(12), .5)
 p2.expand=linvar([0, 1], 24, start=Clock.mod(4))
 
@@ -314,7 +298,7 @@ k1 >> play(
     amp=3
     # dur=Pvar([PDur(3, 8), .25, .5, PDur(5, 8)], PRand(2, 8)),
 )
-k1.ampfadein(16)
+k1.fadein(16)
 k1.rate = PWhite(.8,1.6)
 # k1.mpan(PWhite(0,3.9))
 

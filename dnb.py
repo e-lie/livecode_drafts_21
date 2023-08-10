@@ -55,7 +55,8 @@ change_bpm(140)
 change_bpm(200)
 
 b1 >> acidbass(degree=P[1,None,1,1]*line, curve=linvar([-1,1], 8), dur=PDur(3,8), oct=3, sus=.2, amp=1, lagtime=linvar([0,.3],16), frange=linvar([0,7],8), pan=[-.5,.5])
-b3 >> wobble(line, oct=(3,4), dur=4).fadein(fvol=.8)
+b3 >> wobble(line, oct=(3,4), dur=4).stop()
+.fadein(fvol=.8)
 b3.stop()
 
 
@@ -65,8 +66,6 @@ d2 >> play(".(*.*([**][.*][**][*****]))", output=12, amp=5, rate=[2,3,4], sample
 d2 >> play("[***]([**]i=.)", output=12, amp=4, rate=2, sample=2)
 d2 >> play(".*", rate=2)
 d2.stop()
-
-
 
 sn >> play("<..i.><..o.>", dur=.5, sdb=1, lpf=20000, rate=1.3, sample=3, amp=4)
 hh >> play("-", dur=.5, sdb=1, sample=0, rate=1.6, amp=2.5, room2=5)

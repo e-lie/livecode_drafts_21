@@ -1,3 +1,7 @@
+# C'est du 15/16 en profiter pour faire des basculements kick techno 4/5 ie 120/150 bpm ?? euh pas sur que ce soit 120/150
+# essayer de faire de meilleures mélodies avec des var ici !!
+
+
 Clock.clear()
 
 Root.default = 0
@@ -24,7 +28,7 @@ srand_4 = sinvar(PWhite(0,4)[:17].stutter(2), [3.5,.5])
 
 bpm_to(100,16)
 
-change_bpm(100)
+change_bpm(120)
 change_bpm(100)
 # Clock.meter = (15*.25,1)
 
@@ -57,8 +61,8 @@ m1 >> marimba(
     amp=linvar([.75, .45], 15*.25, start=Clock.mod(4)),
     sus=.1,
     dur=.25,
-    vol=2,
-).fadein(4, ivol=.5, fvol=2)
+)
+m1.fadein(16, ivol=.5, fvol=1)
 # m1.span(srand_4, .4)
 
 m1.degree = mmelody + P(0,2)
@@ -66,7 +70,6 @@ m1.oct = 5
 
 t1 >> equals([0,2], dur=[.25,.75], oct=[8], pan=[.8,0,.5,-.7,.1,-.8])
 t1.mpan(PWhite(0,3.9, seed=2)[:23].stutter(2))
-t1.ampfadein(8, famp=1.3)
 t1.fadein(8, fvol=1.1)
 t1.bass_pulse=.8
 t1.detune=1
@@ -95,18 +98,18 @@ a4.fadeout(32)
 ############   Synthé cutoff - s'attendre
 ################################################################
 
-m3 >> lavitar(
+m3 >> blip(
     P[12,2,4,2,-2].stutter(3),
     oct=P[7,3,5,4,3],
-    amp=.7,
+    amp=2,
     dur=.25,
     vol=1,
-    cutoff=.2,
+    lpf=9000,
     level=1,
     reso=1,
 )
 #m3.span(.5)
-m3.fadein(15*.25*3, fvol=1.5)
+# m3.fadein(15*.25*3, fvol=1.5)
 
 m3.cutoff=linvar([.2,.9], [15*.25*15,inf], start=Clock.mod(15*.25))
 # m3.span(srot(64), .6)
@@ -130,88 +133,6 @@ m3.vol = 2
 ############  Question / Réponse
 ################################################################
 
-
-########## Coupure générale s'attendre puis garder seulement le métronome
-tt.solo()
-si >> keypong(
-    Pvar([
-      [0],
-      [1,17],
-      [0,2,12,17,8,17],
-    ],
-    15*.25*4,
-    start=Clock.mod(15*.25)
-    ),
-    dur=Pvar([
-      .25,
-      1/3,
-      [.25,.25,.125,.125],
-      [1],
-    ],15*.25*3, start=Clock.mod(15*.25)),
-    fx=linvar([1,0], 15*.25),
-    chorus=linvar([1,0], [15*.25,1,3]),
-    # time=linvar([1,0], [15*.25,1,3]),
-    # timbre=linvar([1,0], [15*.25,1,3]),
-    vol=2,
-    oct=Pvar([(3,4),[3,6,3,5]],15*.25*4, start=Clock.mod(15*.25)),
-    amp=1,
-    amplify=var([1,0,0], [15*.25*2,0,15*.25*2], start=Clock.mod(15*.25)),
-    root=Pvar([0,P[0,4,5].stutter(5),PTri(12)], 15*.25*4, start=Clock.mod(15*.25)),
-    scale=Pvar([Scale.major, Scale.minor, Scale.chromatic], 15*.25*4, start=Clock.mod(15*.25)),
-)
-
-si >> sizzle(
-    Pvar([
-      [0],
-      [1,17],
-      [0,2,12,17,8,17],
-    ],
-    15*.25*4,
-    start=Clock.mod(15*.25)
-    ),
-    dur=Pvar([
-      .25,
-      1/3,
-      [.25,.25,.125,.125],
-      [1],
-    ],15*.25*3, start=Clock.mod(15*.25)),
-    fx=linvar([1,0], 15*.25, start=Clock.mod(15*.25)),
-    reverb=linvar([1,0], [15*.25,1,3], start=Clock.mod(15*.25)),
-    # time=linvar([1,0], [15*.25,1,3]),
-    # timbre=linvar([1,0], [15*.25,1,3]),
-    vol=2,
-    oct=Pvar([(3,4),[3,6,3,5]],15*.25*4, start=Clock.mod(15*.25)),
-    amp=1,
-    amplify=var([1,0,0], [15*.25*2,0,15*.25*2], start=Clock.mod(15*.25)),
-    root=Pvar([0,P[0,4,5].stutter(5),PTri(12)], 15*.25*4, start=Clock.mod(15*.25)),
-    scale=Pvar([Scale.major, Scale.minor, Scale.chromatic], 15*.25*4, start=Clock.mod(15*.25)),
-)
-dd >> play(
-    Pvar([
-      "v",
-      "c[++]c[.V]",
-      "X[XXXXX].",
-    ],
-    15*.25*4,
-    start=Clock.mod(15*.25)
-    ),
-    output=12,
-    dur=Pvar([
-      .25,
-      1/3,
-      [.25,.25,.125,.125],
-      [1],
-    ],15*.25*3, start=Clock.mod(15*.25)),
-    # fx=linvar([1,0], 15*.25, start=Clock.mod(15*.25)),
-    # reverb=linvar([1,0], [15*.25,1,3], start=Clock.mod(15*.25)),
-    # time=linvar([1,0], [15*.25,1,3]),
-    # timbre=linvar([1,0], [15*.25,1,3]),
-    oct=Pvar([(3,4),[3,6,3,5]],15*.25*4, start=Clock.mod(15*.25)),
-    amp=2,
-    amplify=var([1,0,0], [15*.25*2,0,15*.25*2], start=Clock.mod(15*.25)),
-    root=Pvar([0,P[0,4,5].stutter(5),PTri(12)], 15*.25*4, start=Clock.mod(15*.25)),
-    scale=Pvar([Scale.major, Scale.minor, Scale.chromatic], 15*.25*4, start=Clock.mod(15*.25)),
-)
 
 
 ################################################################
