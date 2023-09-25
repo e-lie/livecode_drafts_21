@@ -215,7 +215,7 @@ bb >> pluckbass([0,0,1], oct=3, dur=[1,5.5,1.5], amp=[0,1,1], sus=bb.dur+1)
 bb >> pluckbass([0], oct=3, dur=[1.5,1.5,2], amp=1, sus=bb.dur+1)
 bb >> bbass(0, oct=P[3,4,3].stutter(2), dur=.25, amp=[0,1,1], sus=bb.dur+.2) + (chords + P[0,2,0,1].stutter(2))
 
-ft >> pharao("pokpk", dur=.5, amp=PWhite(.7,.95), vol=1.4, root=0, scale=Scale.chromatic)
+ft >> pstrings("pokpk", dur=.5, amp=PWhite(.7,.95), vol=1.4, root=0, scale=Scale.chromatic)
 ft.stop()
 
 b4 >> reese([0,0,2], oct=4, dur=4)
