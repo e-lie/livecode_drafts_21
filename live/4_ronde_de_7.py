@@ -1,8 +1,3 @@
-# Ici ajouter une partie techno non mélodique au début puis faire rentrer la mélodies
-# gros kicks rumble hadone like ?
-# ajouter des stabs ???
-
-
 Root.default = 0
 
 change_bpm(140)
@@ -19,8 +14,8 @@ s1 >> pstrings(
     cutoff=linvar([.2, .5], [15 * .25 * 15], start=Clock.mod(4)),
     level=.3,
 ) + P(0, 2)
-s1.fadein(ivol=1, fvol=1.5)
-Scale.default = Pvar([Scale.minor, Scale.major], 14)
+s1.fadein(ivol=1, fvol=1.2)
+Scale.default = Pvar([Scale.chinese, Scale.majorPentatonic], 14)
 s1.only()
 
 p1 >> dakeys(
@@ -43,10 +38,9 @@ p1.fadein(32, fvol=.95)
 
 p1.pad = linvar([0, .5], 24, start=Clock.mod(4))
 
-
 k5 >> play(
-    # degree="V...",
-    degree = "<V.xV>",
+    degree="V...",
+    # degree = "<V.xV>",
     # degree = "<V.x.><..[(...X)X]>",
     # degree = "<V.x.><.(..[XV])[(...X)X]>",
     # degree = "<V.x.><.(..[XV])[(...X)X]>",
@@ -57,7 +51,7 @@ k5 >> play(
     # room2=3,
     room2=.1,
     lpf=8000,
-    amp=1.5,
+    amp=1.2,
     # rate=PWhite(.8,1.8),
     # cut=linvar([.1,.9], 8),
     # cut=1,
@@ -65,7 +59,9 @@ k5 >> play(
 # k5.mpan((PRand(0,1),PRand(2,3)))
 k5.fadein(16)
 
-p1.dur = cascara
+s1.fade(fvol=1)
+
+s1.dur = cascara
 
 cp >> play(".(.**.)(**.-)(..(O.)(.O))", dur=.25, lpf=8000, hpf=1000, amp=2, rate=2)
 cp.fadein(16)
@@ -80,7 +76,7 @@ p1.space = linvar([0,1],32, start=Clock.mod(4))
 
 s1.fadeout(64, ivol=1.5, fvol=.5)
 
-a2 >> padarp(
+a3 >> padarp(
     [0, 2,0,5],
     # dur=[1.1,p.9],
     dur=.5,
@@ -99,23 +95,23 @@ a2 >> padarp(
 # a2.fadein(fvol=1.2)
 # a2.span(linvar([0,3.99], [2,48,8]), linvar([0,1.5], 32))
 
-a2.dur = clave23
+a3.dur = clave23
 
 Scale.default = Scale.majorPentatonic
 
-a2.expand=linvar([1,0], [16,inf], start=Clock.mod(4))
-a2.verb=linvar([1,0], [16,inf], start=Clock.mod(4))
+a3.expand=linvar([1,0], [16,inf], start=Clock.mod(4))
+a3.verb=linvar([1,0], [16,inf], start=Clock.mod(4))
 
 # p1.span(srot(7),linvar([.3,1], 24, start=Clock.mod(4)))
 
-a2.oct=Pvar(P[(4,5), 3, (3,4,5)]+2, P[2,4,3,3]+2)
+a3.oct=Pvar(P[(4,5), 3, (3,4,5)]+2, P[2,4,3,3]+2)
 
-a2.detune = 0
+a3.detune = 0
 
-a2.delay=linvar([0,.6,0], [64,16,inf], start=Clock.mod(4))
+a3.delay=linvar([0,.6,0], [64,16,inf], start=Clock.mod(4))
 
 k5.degree = "<V.xV><.(..[XV])[(...X)X]>"
-k5.amp=2
+k5.amp=15
 
 Scale.default = Pvar([Scale.minor, Scale.major, Scale.minor, Scale.majorPentatonic, Scale.major], 14)
 
@@ -165,18 +161,6 @@ e3.pause(4, 16, 12)
 
 l_all.stop()
 
-m1 >> sphrases(
-    oct=3,
-    dur=8,
-    filter_fx_switch=0,
-    filter_fx_cutoff=linvar([.3,1], 32, start=Clock.mod(4)),
-    blend=0,
-    drive=0,
-    # sputter=0,
-    sputter=linvar([0,1],16),
-    # filter_fx_cutoff=linvar([.2,.5]),
-)
-
 m1.curr_players()
 
 cp.fadeout(24)
@@ -205,10 +189,14 @@ k5.degree = "<V.><v.><X.>"
 
 p1.oct = (6,7)
 
+mx.ru_blend=linvar([0,.5], [16,64,inf], start=Clock.mod(4))
+
 bpm_to(260, 32)
 
 p1.oct = (4,7)
 
 Group(si, dd).only()
 
-bpm_to(60, 32)
+bpm_to(60, 16)
+
+change_bpm(120)

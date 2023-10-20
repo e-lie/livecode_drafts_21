@@ -61,7 +61,7 @@ dd >> play(
     Pvar(
         ["v", "c[++]c[.V]", "X[XXXXX]."],
         15*.25*4,
-        start=Clock.mod(15*.25)
+        start=Clock.mod15*.25)
     ),
     output=12,
     dur=Pvar([

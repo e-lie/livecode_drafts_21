@@ -2,7 +2,7 @@ Clock.clear()
 
 Root.default = var([0,1,2], PRand([1,8]))
 Root.default = 0
-Root.default = var(PTri(12), 4, start=Clock.mod(4))
+Root.default = var(PTri(12), 8, start=Clock.mod(4))
 Root.default = var(PTri(12), 16, start=Clock.mod(4))
 Root.default = var(PTri(12), .25)
 
@@ -15,7 +15,8 @@ chords2 = var([0,2,5,4],[8,4,2,2])
 chords3 = var([2,0,3,4],[8,4,2,2])
 Clock.meter = (4,4)
 Root.default = 0
-Scale.default = Scale.minor
+
+Scale.default = Scale.chinese
 
 d6 >> play("<x.*...*.>", dur=.5, sample=1, rate=(1.2,1.6), amp=2, room2=2)
 d6.fadein()
@@ -37,7 +38,7 @@ bb >> pluckbass(
     width=linvar([.2,1],32, start=Clock.mod(4)),
     reverb=linvar([0,1],24, start=Clock.mod(4)),
     buzz=linvar([.3,.7],28, start=Clock.mod(4)),
-    vol=1.3,
+    vol=1,
     # sus=linvar([.5,2], 32),
     # pan=var([-.5, 0, .5], 4)
 )#.pause(8, 32)
@@ -53,10 +54,11 @@ k5 >> kicker(
     # rate=linvar([.8, 1.2], 16),
     lpf=700,
     rate=1,
-    amp=1.2,
+    amp=1,
     output=12
 ).fadein()
 bb.pause(8,32)
+
 
 l1 >> blip(
     chords + P(0,2),
@@ -73,11 +75,19 @@ l1 >> blip(
     # pan=var([-1, 0, 1, 0])
 ).fadein()
 
-l1.fade(fvol=1.4)
-l1.pause(4, 16)
+Root.default = 0
 
+l1.fade(fvol=1.4)
+
+d6.solo()
+
+change_bpm(140)
+
+d6.solo(0)
 l1.degree = chords + P(0,2)
 bb.degree = chords
+
+l1.pause(4, 16)
 
 k5.degree = "V...vV.."
 k5.amp=1.6
@@ -104,7 +114,7 @@ d6.degree = "..(iii{[IIIIIIII]*})...(i[ii])."
 d6.amp=2
 d6.pan=[-1,0,1]
 
-Scale.default = Scale.egyptian
+Scale.default = Scale.aeolian
 
 e3 >> play(
     "*",
@@ -150,7 +160,7 @@ Root.default = var(PTri(8), 2)
 Root.default = 0
 k5.degree = "V......."
 
-bb.ampfadeout()
+bb.fadeout()
 e3.stop()
 
 somegroup = Group(l1, l2, a1)
@@ -171,7 +181,6 @@ l2.dur=var([1,.5,.25],[20,8,4])
 l2.degree = chords + P[0,2,0,-2,0,3,0,5,4,0] + P(0,2)
 l2.pause(4, 16, 8)
 
-l1.fadeout(24, fvol=.8)
 
 bb >> bass303(
     chords2,
@@ -202,14 +211,18 @@ b2 >> pluckbass(
 )
 b2.fadein(fvol=.95)
 
+l1.fade(24, fvol=.8)
+
 bb.dur = var([2,.5,1/3,.25], 8, start=Clock.mod(4))
 b2.dur = var([2,.5,1/3,.25], 8, start=Clock.mod(4))
+
+a1.fade(24, fvol=.7)
 
 k5 >> play(
     "<V><x>",
     dur=clave23,
     sample=P[0, 1, 2].stutter(5),
-    amp=2,
+    amp=1.6,
     output=12
 )
 
@@ -246,7 +259,7 @@ k6 >> kicker(
     output=12,
 )
 
-Scale.default = Scale.chromatic
+Scale.default = Scale.minor
 Root.default = var(PTri(6), [16]*6+[inf], start=Clock.mod(4))
 
 # Root.default = var(PTri(12), .25, start=Clock.mod(4))
@@ -295,8 +308,6 @@ n1 >> padarp(
 n1.pause(4, 16)
 n1.fadein()
 
-n1.curr_players()
-
 a4.fadeout(32)
 
 n2 >> dakeys(
@@ -307,10 +318,6 @@ n2 >> dakeys(
     room2=1,
     pan=[-1, 0, 1]
 )#.pause(4, 16, 8)
-
-n2.curr_players()
-
-n2.fadeout()
 
 k4 >> play(
     ".VxV",
@@ -336,11 +343,13 @@ e3 >> play(
 e3.fadein(16)
 e3.pause(4, 16, 12)
 
-k4.ampfadein(32, iamp=1, famp=1.5)
+k4.fade(16, fvol=1.2)
 
 Scale.default = Scale.minor
-k7 >> play('<X.><v.>', dur=1 / 2, sdb=1, sample=1, amp=6, output=12, lpf=800)
+k7 >> play('<X.><v.>', dur=1 / 2, sdb=1, sample=1, amp=5, output=12, lpf=800)
 k4.ampfadeout(64, iamp=1.5, famp=.7)
+
+k7.fade(32, fvol=1)
 
 l1.stop()
 
@@ -367,10 +376,6 @@ k7.fadeout(32)
 
 l1.fadeout(16)
 e3.fadeout(32)
+cp.fadeout()
 
-e3.curr_players()
-
-s1.sfadeout()
-
-
-Clock.clear()
+s1.only()
