@@ -1,38 +1,3 @@
-Clock.clear()
-
-k1.curr_players()
-
-from FoxDot.preset import *
-
-mixer = instanciate("_mixer", "effects/fxstack_1_off")
-duckless = instanciate("_duckless", "effects/kick_fx_1")
-
-# bino1 = instanciate("bino1", "effects/stereo2bino_1")
-# bino2 = instanciate("bino2", "effects/stereo2bino_1")
-# bino3 = instanciate("bino3", "effects/stereo2bino_1")
-# bino4 = instanciate("bino4", "effects/stereo2bino_1")
-
-gone = instanciate("chan1", "pads/gone_1")
-bass303 = instanciate("chan2", "bass/bass303_1")
-apad = instanciate("chan3", "pads/apad_1")
-marimba4 = instanciate("chan4", "mallets/marimba_1")
-vibra1 = instanciate("chan5", "mallets/vibra_1")
-# sheer = instanciate("chan6", "synth_keys/sheer_1")
-pstrings = instanciate("chan7", "guitars_strings/pstrings_1")
-pluckbass = instanciate("chan8", "bass/pluckbass_1")
-lone1 = instanciate("chan9", "synth_keys/lonesine_1")
-equals = instanciate("chan10", "synth_keys/equals_1")
-dakeys = instanciate("chan11", "synth_keys/dakeys_1")
-padarp = instanciate("chan12", "synth_keys/padarp_1")
-keypong = instanciate("chan13", "synth_keys/keypong_1")
-sizzle = instanciate("chan14", "synth_keys/sizzle_1")
-wobble = instanciate("chan16", "bass/wobble_1")
-# reese = instanciate("chan15", "bass/reese_1") # TODO debug midichannel 15
-
-# Clock.latency = .5
-# Clock.midi_nudge = -.235 # latency 1024/48000
-Clock.latency = .5
-Clock.midi_nudge = -.232 # latency 2048/48000
 
 change_bpm(130)
 Root.default = 0
@@ -41,8 +6,13 @@ Root.default = 0
 Scale.default = Scale.chromatic
 pitches = [0, 2, 5, 2, 0, -2, 5, 4]
 
-mx >> mixer([None], vdee_mix=0)
-dl >> duckless(dot8_mix=.5)
+z1 >> bino1([None]).span(srot(48), linvar([.1,.2,0,.5,0.1], 32, start=Clock.mod(4)))
+z2 >> bino2([None]).span(srot(32), linvar([.1,1,0,.5,0,.7,0], 24, start=Clock.mod(4)))
+z3 >> bino3([None]).span(srot(64), linvar([.1,.3,0,.5,0,.4], 48, start=Clock.mod(4)))
+z4 >> bino4([None]).span(srot(40), linvar([.1,.2,0,.5,0], 16, start=Clock.mod(4)))
+
+mx >> mixer([None], vdee_mix=0, vdee2_mix=0)
+dl >> duckless([None], dot8_mix=.5)
 
 a1 >> apad(
     P[0, 4, -2],
@@ -64,9 +34,14 @@ a1.thick_thin=linvar([0,1,.4,.8,0,.6], PRand(2,24), start=Clock.mod(4))
 #     elevation_slider=linvar([.2,.8],77),
 # )
 
+a1.only()
+
+z3 >> bino3([None]).span(srot(16), .2)
+
 a1.degree = P[0,4,-2] + P(0,4)
 
 mx.deda_drywet = linvar([0, .4], [16,inf], start=Clock.mod(4))
+mx.deda2_drywet = linvar([0, .4], [16,inf], start=Clock.mod(4))
 
 Scale.default = Scale.major
 
@@ -77,12 +52,14 @@ k2.fadein(16)
 a1.degree = P[0,4,-2] + P(0,4,5)
 
 mx.ru_blend=linvar([0,.3], [64,32,inf], start=Clock.mod(4))
+mx.ru2_blend=linvar([0,.3], [64,32,inf], start=Clock.mod(4))
 
 s1 >> pstrings(
     # [0, 5, 4, 0, 4, 3],
     [0],
     # dur=1,
     dur=[2, 1, 2, 3],
+    sus=P[2, 1, 2, 3]-.1,
     oct=4,
     amp=P[.3, .7, .8, 1.1],
     # cutoff=.5,
@@ -92,6 +69,7 @@ s1 >> pstrings(
 )
 s1.fadein(16, fvol=1)
 mx.deda_drywet = linvar([.4, 0], [64,inf], start=Clock.mod(4))
+mx.deda2_drywet = linvar([.4, 0], [64,inf], start=Clock.mod(4))
 
 a1.space=linvar([0,1,.4,.8,0,.6],PRand(2,24), start=Clock.mod(4))
 
@@ -138,6 +116,7 @@ dl >> duckless(dot8_mix=var([0,.5],64))
 a4.pitch = linvar([0,1,.4,.8,0,.6],PRand(2,24, seed=2), start=Clock.mod(4))
 
 mx.vdee_mix = linvar([0,.2], [16,inf], start=Clock.mod(4))
+mx.vdee2_mix = linvar([0,.2], [16,inf], start=Clock.mod(4))
 a4.oct = 4
 
 a4.arp = linvar([0,1,.4,.8,0,.6],PRand(2,24), start=Clock.mod(4))
@@ -149,6 +128,11 @@ cc.fadeout(24)
 a4.fade(32, fvol=.5)
 
 a1.fade(24, fvol=.3)
+
+g1 >> blip(var([4,2,5], [2,4,1]), dur=[.25,.25,.5], oct=7, sus=2, amp=1, room2=1)
+g1 + [0,2,6,5]
+
+g1.fadeout(16)
 
 # cut delay
 mx.vdee_mix = 0
@@ -177,6 +161,7 @@ hh >> play("..-.", sdb=1, amp=2, rate=1.2, dur=.25, sample=6, pan=linvar([-.5,.5
 
 s1.amp = [0,1,1,0,1,1]
 
+
 s1.amp = [1,1,1,0,1,1]
 
 s1 + [(0,2), 0, 5, 2]
@@ -198,11 +183,15 @@ k3 >> play(
 )
 k3.fadein(16, fvol=1)
 
+
 hh >> play("..(---(b--(ib)))(.-)", sdb=1, amp=2, rate=1.2, dur=.25, sample=6)
+
+hh.mpan(mrot(8))
 
 s1.dur = Pvar([[.5,.25,.25],.5], 32, start=Clock.mod(4))
 
 mx.deda_drywet = linvar([0, .3], [16,inf], start=Clock.mod(4))
+mx.deda2_drywet = linvar([0, .3], [16,inf], start=Clock.mod(4))
 
 s1.fade(16, fvol=.7)
 
@@ -220,11 +209,7 @@ k1.lpf = 800
 
 s1.fade(32, fvol=1)
 
-s1.fade(8,fvol=.1)
-
 s1.oct=(5,6)
-
-s1.fade(12,fvol=1)
 s1.cutoff=linvar([1,.4],32, start=Clock.mod(4))
 
 mx.deda_drywet = linvar([.3, 0], [16,inf], start=Clock.mod(4))
@@ -238,8 +223,6 @@ a4.arp = 0
 
 pitches = [0, 2, 5, 2, 0, -2, 5, 4]
 s1.degree = pitches
-
-s1.amp = .6
 
 s1 + [(0,2), 0, 5, 2]
 
@@ -257,7 +240,7 @@ s2 >> blip(
 s2.fadein(16, fvol=1.2)
 
 s1.dur=P[P[.5, .5, .5, P*(.25,.25)],.25,.25]
-s1.vol=.6
+s1.amp=1
 
 # un peu de noise
 mx.ru_blend=linvar([0,.3], [64,32,inf], start=Clock.mod(4))
@@ -286,13 +269,11 @@ s2.degree = pitches
 k3.degree = Pvar(["V.x.","<V.x.><.(..[XV])[(...X)X]>"],16, start=Clock.mod(4))
 
 Root.default = var(PTri(12), 8, start=Clock.mod(4))
-
-s2.oct=(4,6)
+s2.oct=(4,5)
 
 Root.default = var(PTri(12), .25)
 
 Scale.default = Pvar([Scale.minor, Scale.major, Scale.minor, Scale.majorPentatonic, Scale.major], PRand(1,4)[:32]*4)
-
 k3 >> play("..(...x)(...(.X))", dur=.25, lpf=900, output=12)
 
 k3.degree = "(V).(...x)(...(.X))"
@@ -325,7 +306,7 @@ s3.pause(8,24,smooth=.3)
 
 s2.fadeout(16)
 
-s4 >> blip(
+s2 >> blip(
     [0,2],
     dur=P[.5, .25, .25],
     amp=P[.8, .7, .8, 1.1] * 2,
@@ -335,10 +316,8 @@ s4 >> blip(
     oct=[5, 7, 6, 7, 5, 6],
     sus=linvar([.3, 2], [48], start=Clock.mod(4)),
 )
-s4.fadein(16)
-s4.pause(8,24,8,smooth=.3)
-
-s4.amp=.8
+s2.fadein(16)
+s2.pause(8,24,8,smooth=.3)
 
 s3.dur=P[P[.5, .5, .5, P*(.25,.25)],.25,.25]
 
@@ -416,12 +395,13 @@ k4.fadeout(32)
 
 k3.fadeout()
 
-s4.fadeout()
+s2.fadeout()
 s3.fadeout()
 p2.fadeout()
 
 Root.default = 0
-bpm_to(120, 128)
+
+bpm_to(60, 32)
 
 a4.fade(32,fvol=.6)
 

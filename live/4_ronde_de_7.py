@@ -18,6 +18,7 @@ s1.fadein(ivol=1, fvol=1.2)
 Scale.default = Pvar([Scale.chinese, Scale.majorPentatonic], 14)
 s1.only()
 
+
 p1 >> dakeys(
     # chords+P[0, 2, 5, 2, -2, 1, 4],
     # P[0, 2, 5, 2, -2, 1, 4].rotate(3),
@@ -68,13 +69,15 @@ cp.fadein(16)
 
 p1.fadeout(8, ivol=.95, fvol=.85)
 
+p1.vol=1.2
+
 p1.modelb = linvar([0,1],32, start=Clock.mod(4))
 
 p1.pluck = linvar([1,0],24, start=Clock.mod(4))
 
 p1.space = linvar([0,1],32, start=Clock.mod(4))
 
-s1.fadeout(64, ivol=1.5, fvol=.5)
+s1.fade(64, fvol=.8)
 
 a3 >> padarp(
     [0, 2,0,5],
@@ -111,38 +114,35 @@ a3.detune = 0
 a3.delay=linvar([0,.6,0], [64,16,inf], start=Clock.mod(4))
 
 k5.degree = "<V.xV><.(..[XV])[(...X)X]>"
-k5.amp=15
+k5.amp=1
 
-Scale.default = Pvar([Scale.minor, Scale.major, Scale.minor, Scale.majorPentatonic, Scale.major], 14)
+Scale.default = Pvar([Scale.majorPentatonic, Scale.major, Scale.minor, Scale.major], 14, start=Clock.mod(4))
 
 a2.verb = 0
 a2.expand = 0
 a2.oct = (3,6)
 
 Root.default = var(PTri(12), 14, start=Clock.mod(14))
-Scale.default = Scale.minor
+# Scale.default = Scale.minor
 p1.fadein(64, ivol=1, fvol=1.3)
 
 Root.default = var(PTri(12), 1)
 
 Root.default = var(PTri(12), 4)
 
-Root.default = var(PTri(12), .25)
-
 e3 >> play(
     "iii[**]",
     dur=.5,
-    sample=P[0, 1, 2].stutter(4),
+    # sample=P[0, 1, 2].stutter(4),
+    sample=1,
     rate=PWhite(1.2, 1.5),
-    amp=2,
+    amp=1.3,
     pan=P[-1, 0, .5, 0, 1, 0].stutter(4)
 )
 # e3.mpan(PWhite(0,3.9)[:17].stutter(3))
 e3.pause(4, 16, 12)
 
-e3.amp =1.2
-
-a2.fadeout(16, ivol=1.5, fvol=1)
+Root.default = var(PTri(12), .25)
 
 e3 >> play(
     # "iii[ii]",
@@ -160,8 +160,6 @@ e3.faderand(16)
 e3.pause(4, 16, 12)
 
 l_all.stop()
-
-m1.curr_players()
 
 cp.fadeout(24)
 
@@ -189,13 +187,9 @@ k5.degree = "<V.><v.><X.>"
 
 p1.oct = (6,7)
 
-mx.ru_blend=linvar([0,.5], [16,64,inf], start=Clock.mod(4))
+mx.ru_blend=linvar([0,.8], [32,64,inf], start=Clock.mod(4))
 
 bpm_to(260, 32)
-
-p1.oct = (4,7)
-
-Group(si, dd).only()
 
 bpm_to(60, 16)
 

@@ -9,13 +9,15 @@ Scale.default = Scale.minor
 
 Root.default = 0
 
-si >> keypong([0,2,12,17,8,17], oct=var([4,5,3,4],6), amp=var([1,.8,.8,0],6), dur=1)
+ke >> keypong([0,2,12,17,8,17], oct=var([4,5,3,4],6), amp=var([1,.8,.8,0],6), dur=1)
+
+ke.solo()
 
 k5 >> play("V.", amp=1.3, output=12, lpf=700)
 
-si.dur = var([1,.25], [24,8])
+ke.dur = var([1,.25], [24,8])
 
-si.dur = Pvar([
+ke.dur = Pvar([
       .25,
       1/3,
       [.25,.25,.125,.125],
@@ -30,7 +32,7 @@ dd >> play("X([XXXXXXXX].V[VVV])", output=12, amp=2)
 
 e3.fadeout(64)
 
-si >> keypong(
+ke >> keypong(
     Pvar(
         [[0],[1,17],[0,2,12,17,8,17]],
         15*.25*4,
@@ -81,7 +83,7 @@ dd >> play(
     scale=Pvar([Scale.major, Scale.minor, Scale.chromatic], 15*.25*4, start=Clock.mod(15*.25)),
 )
 
-si >> sizzle(
+ke >> sizzle(
     Pvar([
       [0],
       [1,17],
@@ -136,4 +138,4 @@ dd >> play(
     scale=Pvar([Scale.major, Scale.minor, Scale.chromatic], 15*.25*4, start=Clock.mod(15*.25)),
 )
 
-Group(dd, si).sfadeout(32)
+Group(dd, ke).sfadeout(32)

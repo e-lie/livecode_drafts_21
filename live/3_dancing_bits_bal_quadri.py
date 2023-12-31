@@ -1,71 +1,5 @@
-Clock.clear()
 
-Root.default = var([0,1,2], PRand([1,8]))
-Root.default = 0
-Root.default = var(PTri(12), 8, start=Clock.mod(4))
-Root.default = var(PTri(12), 16, start=Clock.mod(4))
-Root.default = var(PTri(12), .25)
-
-Scale.default = Pvar([Scale.minor, Scale.major, Scale.minor, Scale.majorPentatonic, Scale.major], PRand(1,4)[:32]*4)
-Scale.default = Scale.minor
-
-Root.default = 0
-chords = var([0,5,2,3],[8,4,2,2])
-chords2 = var([0,2,5,4],[8,4,2,2])
-chords3 = var([2,0,3,4],[8,4,2,2])
-Clock.meter = (4,4)
-Root.default = 0
-
-Scale.default = Scale.chinese
-
-k5 >> play("<V.......>", dur=.5, sample=1, rate=(1.2,1.6), amp=1, room2=0)
-d6 >> play("<..*...*.>", dur=.5, sample=1, rate=(1.2,1.6), amp=1, room2=0)
-d6.fadein()
-k5.fadein()
-
-change_bpm(120)
-
-# o3 >> bino3(
-#     [None],
-#     setup_id=.32,
-#     azimuth_slider=linvar([.3,.7],48),
-#     elevation_slider=linvar([.2,.8],77),
-# )
-# o2 >> bino2(
-#     [None],
-#     setup_id=.32,
-#     azimuth_slider=linvar([.3,.7],17),
-#     elevation_slider=linvar([.2,.8],45),
-# )
-# o4 >> bino4(
-#     [None],
-#     setup_id=.32,
-#     azimuth_slider=linvar([.3,.7],45),
-#     elevation_slider=linvar([.2,.8],56),
-# )
-
-bb >> pluckbass(
-    [0],
-    # chords,
-    # chords2,
-    # chords3,
-    dur=PDur(3, 8),
-    # dur=cascara,
-    oct=(3,4),
-    amp=2.5,
-    room2=1,
-    # sus=1,
-    drive=linvar([.2,1],16, start=Clock.mod(4)),
-    width=linvar([.2,1],32, start=Clock.mod(4)),
-    reverb=linvar([0,1],24, start=Clock.mod(4)),
-    buzz=linvar([.3,.7],28, start=Clock.mod(4)),
-    vol=1,
-    # sus=linvar([.5,2], 32),
-    # pan=var([-.5, 0, .5], 4)
-)#.pause(8, 32)
-# bb.mpan(3)
-d8 >> play("/", dur=16, pan=[-1, 0, -1], amp=2.5)
-# d8.mpan(PRand(0,3))
+bpm_to(140)
 
 k5 >> kicker(
     "V.......",
@@ -95,18 +29,13 @@ l1 >> blip(
     # pan=var([-1, 0, 1, 0])
 ).fadein()
 
-l1.fade(fvol=1.4)
-
-# d6.solo()
-
-bpm_to(140)
+z1 >> bino1([None]).span(srot(48), linvar([.1,.2,0,.5,0.1], 32, start=Clock.mod(4)))
+z2 >> bino2([None]).span(srot(32), linvar([.1,1,0,.5,0,.7,0], 24, start=Clock.mod(4)))
+z3 >> bino3([None]).span(srot(64), linvar([.1,.3,0,.5,0,.4], 48, start=Clock.mod(4)))
+z4 >> bino4([None]).span(srot(40), linvar([.1,.2,0,.5,0], 16, start=Clock.mod(4)))
 
 l1.degree = chords + P(0,2)
 bb.degree = chords
-
-change_bpm(140)
-
-# d6.solo(0)
 
 k5.degree = "V...vV.."
 k5.amp=1.6
@@ -122,12 +51,13 @@ l2 >> pluck(
     cutoff=.4,
     vol=1.1,
     # room2=1,
-    pan=[-1, 0, 1],
-)
+    # pan=[-1, 0, 1],
+).mpan(mrot(8))
 l2.pause(4, 16, 8)
 
 l2.degree = chords + P[0, 2, 0, P(0, 2)]
 l2.dur=var([1,.5])
+
 
 k5.degree = "V.v.VVv."
 d6.degree = "..(iii{[IIIIIIII]*})...(i[ii])."
@@ -196,8 +126,9 @@ l2 >> pluck(
     cutoff=.4,
     vol=1.1,
     # room2=1,
-    pan=[-1, 0, 1],
+    # pan=[-1, 0, 1],
 )
+l2.mpan(mrot(4))
 l2.dur=var([1,.5,.25],[20,8,4])
 l2.degree = chords + P[0,2,0,-2,0,3,0,5,4,0] + P(0,2)
 l2.pause(4, 16, 8)
@@ -351,6 +282,7 @@ e3 >> play(
 )
 e3.fadein(16)
 e3.pause(4, 16, 12)
+e3.mpan(mrot(128))
 
 Scale.default = Scale.minor
 k7 >> play('<X.><v.>', dur=1 / 2, sdb=1, sample=1, amp=3, output=12, lpf=800)
