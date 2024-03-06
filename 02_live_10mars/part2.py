@@ -1,110 +1,128 @@
-change_bpm(120)
+
+vibra = Player()
+liblip = Player()
+marimba = Player()
+lonesynth = Player()
+kick1 = Player()
+kick2 = Player()
+kick3 = Player()
+kick4 = Player()
+clave = Player()
+shaker = Player()
+kicks = Group(kick1, kick2, kick3, kick4)
+percus = Group(kick1, kick2, kick3, kick4, clave, shakers, hh)
+
+change_bpm(110)
 
 Scale.default = Scale.major
 
 mmelody = var(P[-12,0,-2,0,5,-2,0,0,-2,5,0,-2,0,0,5], .25)
 mmelody2 = var(P[-12,0,-2,0,5,-2,0,0,-2,5,0,-2,0,0], .25)
 
-m1 >> vibra1(mmelody, dur=.25, release=.5, decay=.7, attack=0)
-m1.amp=linvar([.75, .45], 15*.25)
-m1.fadein(30, fvol=1)
-m1.release = .6
-m1.decay = .8
+vibra >> vibra1(mmelody, dur=.25, release=.5, decay=.7, attack=0)
+vibra.amp=linvar([.75, .45], 15*.25)
+vibra.fadein(30, fvol=1)
+vibra.release = .6
+vibra.decay = .8
+vibra.span(srot(24), .2)
 
-m1.release = linvar([.5, .8], [16,inf], start=Clock.mod(4))
-m1.decay = linvar([.7, .3], [16,inf], start=Clock.mod(4))
+vibra.release = linvar([.5, .8], [16,inf], start=Clock.mod(4))
+vibra.decay = linvar([.7, .3], [16,inf], start=Clock.mod(4))
 
-m1.oct = [5, None, None, None, 5]
+vibra.oct = [5, None, None, None, 5]
 
-m1.oct = [5, None, None, None, 6]
+vibra.oct = [5, None, None, None, 6]
 
-m1.oct = [5, 4, None, None, 6]
+vibra.oct = [5, 4, None, None, 6]
 
-ff >> play("b", dur=.125, rate=linvar([3,8],16), amp=.1, sample=5)
-ff.faderand()
+liblip >> play("b", dur=.125, rate=linvar([3,8],16), amp=.1, sample=5)
+liblip.faderand()
 
-m1.fade(fvol=1.3)
+vibra.fade(fvol=1.3)
 
-m1.oct = [5, 4, 6, None, 6]
+vibra.oct = [5, 4, 6, None, 6]
 
-m1.amp=linvar([1, .45], 2*15*.25)
+vibra.amp=linvar([1, .45], 2*15*.25)
 
 Scale.default = Scale.aeolian
 
-m2 >> marimba4(mmelody, dur=.25, release=.5, decay=.7, attack=0)
-m2.amp=linvar([.75, .45], 15*.25, start=Clock.mod(4))
-m2.fadein(8, fvol=1.1)
+marimba >> marimba4(mmelody, dur=.25, release=.5, decay=.7, attack=0)
+marimba.amp=linvar([.75, .45], 15*.25, start=Clock.mod(4))
+marimba.fadein(8, fvol=1.1)
 Scale.default = Scale.dorian
-m2.oct = [None, 4, None, None, None]
+marimba.oct = [None, 4, None, None, None]
 
-m1.fade(fvol=1)
+vibra.fade(fvol=1)
 
-m2.oct = [None, 4, None, 4, 7]
+marimba.oct = [None, 4, None, 4, 7]
 
-m2.release = linvar([.5, .8], [16], start=Clock.mod(4))
+marimba.release = linvar([.5, .8], [16], start=Clock.mod(4))
 
-m2.decay = linvar([.7, .3], [16], start=Clock.mod(4))
+marimba.decay = linvar([.7, .3], [16], start=Clock.mod(4))
 
-m2.attack = linvar([0, .3], [24], start=Clock.mod(4))
+marimba.attack = linvar([0, .3], [24], start=Clock.mod(4))
 
-m1.degree = mmelody + (0,2)
+vibra.degree = mmelody + (0,2)
 
 Scale.default = Scale.aeolian
 
-m2.degree = mmelody + (0,4)
+liblip.fade(fvol=.2)
+bpm_to(120, 32)
+marimba.degree = mmelody + (0,4)
 
-l3 >> lone1(mmelody, dur=.25, reverb_mix=0, delay_mix=0)
-l3.fadein(fvol=1)
-l3.voices = linvar([0,1],32)
-l3.oct=m1.oct
+lonesynth >> lone1(mmelody, dur=.25, reverb_mix=0, delay_mix=0)
+lonesynth.fadein(fvol=1)
+lonesynth.voices = linvar([0,1],32)
+lonesynth.oct=vibra.oct
 
-l3.fade(fvol=1.2)
+lonesynth.fade(fvol=1.2)
 
-ff.fadeout()
 
-m1.degree=mmelody2
-l3.degree=mmelody2
+vibra.degree=mmelody2
+lonesynth.degree=mmelody2
 
-l3.voices = linvar([0,.8],17)
-l3.tones = linvar([0,.8],13)
+lonesynth.voices = linvar([0,.8],17)
+lonesynth.tones = linvar([0,.8],13)
 
-l3.degree = 0
-l3.oct = 4
-l3.voices = 1
+lonesynth.degree = 0
+lonesynth.oct = 4
+lonesynth.voices = 1
 
-l3.degree=mmelody2
+lonesynth.degree=mmelody2
 
-l3.degree = 0
-l3.oct = (4,5)
+lonesynth.degree = 0
+lonesynth.oct = (4,5)
 
-l3.degree = -2
+lonesynth.degree = -2
 
-l3.degree = 2
+lonesynth.degree = 2
 
-l3.degree=mmelody2
-l3.oct = (4,5,6)
+lonesynth.degree=mmelody2
+lonesynth.oct = (4,5,6)
 
-l3.degree = -2
+lonesynth.degree = -2
 
-l3.degree=mmelody2
+lonesynth.degree=mmelody2
 
-l3.oct = (4,5)
-l3.fade(fvol=.1)
-l3.amp=1.8
+lonesynth.oct = (4,5)
+lonesynth.fade(fvol=.1)
+lonesynth.amp=1.8
 
-l3.faderand()
+lonesynth.faderand()
 
-tt.fadeout()
+liblip.fadep("rate", dur=48, fvalue=.1)
+liblip.fade(fvol=1)
 
 Scale.default = Pvar([Scale.major, Scale.mixolydian, Scale.minor, Scale.dorian],15*.25)
 
-kk >> play("x..............", dur=.25, amp=1.4, lpf=300, sample=1, sdb=0, output=12)
-kk.fadein(15)
-kk.rate=(1,1.8)
+kick1 >> play("x"+14*'.', dur=.25, amp=1.2, lpf=300, sample=1, sdb=0, output=12)
+kick1.fadein(15)
+kick1.rate=(1,1.8)
 
-k2 >> play("V...............", dur=.25, amp=1, lpf=300, sample=1, sdb=0, output=12)
+kick2 >> play("V"+15*'.', dur=.25, amp=1, lpf=300, sample=1, sdb=0, output=12)
 
-kk.degree="x.(..x).."
+kick1.degree="x.(..x).."
+
 
 hh >> play(".-", rate=.3, room2=0, sdb=0, sample=3, pan=linvar([-.8,.8], 48))
 
@@ -113,6 +131,8 @@ hh.degree = ".[--]"
 hh.pan=P[-1,0,1,0,.5]*.8
 
 hh.degree = ".[--...]"
+bpm_to(130, 128)
+liblip.fadeout(32)
 
 hh.degree = ".[---..]"
 
@@ -121,9 +141,9 @@ hh.degree = ".[----.]"
 hh.room2 = 0
 hh.room2 = linvar([0,1], [8,inf], start=Clock.mod(4))
 
-d2 >> play("X...", dur=.25, amp=.8, lpf=200, sample=1, sdb=0, output=12)
-d2.fadein(7.5)
-d2.amp=1.2
+kick3 >> play("X...", dur=.25, amp=.8, lpf=200, sample=1, sdb=0, output=12)
+kick3.fadein(7.5)
+kick3.amp=1.2
 
 hh.degree = ".[-----]"
 
@@ -133,156 +153,88 @@ hh.rate = linvar([.3,2], [45, inf], start=Clock.mod(4))
 
 hh.degree = "[-----]"
 
-d2.degree = "[XXX]..(.X)."
+vibra.oct = [5, 4, None, None, 6]
 
-m1.oct = [5, 4, None, None, 6]
-
-d2.degree = "X..X."
+kick3.degree = "X..X."
 hh.amp=3
 hh.pan=0
 hh.room2=0
 hh.degree = ".-"
 
-dd.degree = "x..x."
+kick3.lpf=400
+kick1.lpf=400
+kick4 >> play("V(..(xv))", output=12, lpf=600, amp=.8).fadein()
+kick1.fadeout()
 
-dd.sample=2
+vibra.fadeout(32)
 
-d2.lpf=400
-kk.lpf=400
-d3 >> play("V(..(xv))", output=12, lpf=600, amp=.8).fadein()
+kick4.pause(8,32)
 
-m1.fadeout(32)
+kick3.degree = "([XXX]X)(...X)"
 
-d3.pause(8,32)
+kick4.sample = 2
+kick3.amp=.8
+kick4.solo(0)
 
-d2.degree = "([XXX]X)(...X)"
-
-d3.sample = 2
-d2.amp=.8
-d3.solo(0)
-
-d4 >> play("c", dur=[1/3,2/3], rate=4, lpf=600, amp=2)
-d2.degree = "X..X."
-d2.sample=6
+clave >> play("c", dur=[1/3,2/3], rate=4, lpf=600, amp=2)
+kick3.degree = "X..X."
+kick3.sample=6
 
 Scale.default = Pvar([Scale.chromatic, Scale.majorPentatonic, Scale.minor],8)
 
-d4.dur=Pvar([[1/3,2/3],1/3,[1/6,1/6,2/3]], [16,8,8])
+clave.dur=Pvar([[1/3,2/3],1/3,[1/6,1/6,2/3]], [16,8,8])
 
-d4.rate=P(3,1)
+clave.rate=P(3,1)
 
-d4.rate=P(3,1,6)
+clave.rate=P(3,1,6)
 
-d4.rate=P(6,3,12)
-d4.amp=3
+clave.rate=P(6,3,12)
+clave.amp=3
 
-d4.rate=P*(3,1,6,9,15)
+clave.rate=P*(3,1,6,9,15)
 
-d4.rate=P(6,3,12)
+clave.rate=P(6,3,12)
 
-d4.dur=[1/3,2/3]
+clave.dur=[1/3,2/3]
 
-d4.rate=P(3,1,6)
+clave.rate=P(3,1,6)
 
-d4.curr_players()
-kk.fadeout()
+clave.curr_players()
+kick1.fadeout()
 
-d4.rate=4
-d4.fade(fvol=.8)
+clave.rate=4
+clave.fade(fvol=.8)
 
-d5 >> play("s.", dur=[.4,.3,.3], rate=[1,1.2,1], amp=3, sample=0)
-d5.rate = linvar([1,4], 32)
-d5.room2=.6
-d4.amp=2.5
+shaker >> play("s..", dur=[.4,.3,.3], rate=[1,1.2,1], amp=3, sample=0)
+shaker.rate = linvar([1,4], 32)
+shaker.room2=.6
 
-d5.degree = "s"
-d4.amp=4
+shaker.degree = "s."
+clave.amp=2.5
 
-d4.dur=Pvar([[1/3,2/3],1/3,[1/6,1/6,2/3]], [16,8,8])
+shaker.degree = "s"
+clave.amp=4
+
+clave.dur=Pvar([[1/3,2/3],1/3,[1/6,1/6,2/3]], [16,8,8])
 
 Clock.meter = (4,4)
 Root.default = 0
 
 Scale.default = Scale.chinese
 
-d4.degree = "c{c.}"
+clave.degree = "c{c.}"
 
-d5.degree = "s"
-d5.room2=.6
+shaker.degree = "s"
+shaker.room2=.6
 
-d5.curr_players()
+shaker.curr_players()
 
-ff.fadeout(32)
+liblip.fadeout(32)
 
 d5.degree = "s{s.}"
 
 l1.fadeout(16)
-m2.fadeout(16)
-kk.fadeout(16)
+marimba.fadeout(16)
+kick1.fadeout(16)
 hh.fadeout(32)
-bpm_to(130)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-k5 >> play("<V.......>", dur=.5, sample=1, rate=(1.2,1.6), amp=1, room2=0)
-d6 >> play("<..*...*.>", dur=.5, sample=1, rate=(1.2,1.6), amp=1, room2=0)
-d6.fadein()
-k5.fadein()
-
-bb >> pluckbass(
-    [0],
-    # chords,
-    # chords2,
-    # chords3,
-    dur=PDur(3, 8),
-    # dur=cascara,
-    oct=(3,4),
-    amp=2.5,
-    room2=1,
-    # sus=1,
-    drive=linvar([.2,1],16, start=Clock.mod(4)),
-    width=linvar([.2,1],32, start=Clock.mod(4)),
-    reverb=linvar([0,1],24, start=Clock.mod(4)),
-    buzz=linvar([.3,.7],28, start=Clock.mod(4)),
-    vol=1,
-    # sus=linvar([.5,2], 32),
-    # pan=var([-.5, 0, .5], 4)
-)#.pause(8, 32)
-# bb.mpan(3)
-bb.fadein(16)
-d8 >> play("/", dur=16, pan=[-1, 0, -1], amp=2.5)
-
-hh.fadeout()
-m1.degree=mmelody2
-l1.degree=mmelody2
-
-d5.fadeout(32)
-m1.fadeout(32)
-
-d3.fadeout()
-
-dd.fadeout()
-
-l1.fadeout()
-m2.fadeout()
-kk.fadeout()
+bpm_to(130, 24)
