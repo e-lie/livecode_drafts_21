@@ -1,0 +1,15 @@
+note56: Clock.clear()
+note24: d1 >> blip(oct=5)
+note25: d1 >> blip(oct=6)
+note26: d1 >> blip(oct=4)
+note27: |
+  d1 >> blip(
+    [0,2,5,3],
+    oct=[4,5,6]
+  )
+note0: mx.fadep("stereooctocube_in_1_x", fvalue=1)
+note1: mx.fadep("stereooctocube_in_1_y", fvalue=1)
+note2: mx.fadep("stereooctocube_in_1_z", fvalue=1)
+note3: mx.fadep("stereooctocube_in_1_x", fvalue=0)
+note4: mx.fadep("stereooctocube_in_1_y", fvalue=0)
+note5: mx.fadep("stereooctocube_in_1_z", fvalue=0)

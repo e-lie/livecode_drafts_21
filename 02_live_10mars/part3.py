@@ -1,267 +1,11 @@
-Clock.clear()
 
-k1.curr_players()
 
-s1.fadeout()
-
-from FoxDot.preset import *
-
-mixer = instanciate("_mixer", "effects/fxstack_1_off")
-duckless = instanciate("_duckless", "effects/kick_fx_1")
-
-# bino1 = instanciate("bino1", "effects/stereo2bino_1")
-# bino2 = instanciate("bino2", "effects/stereo2bino_1")
-# bino3 = instanciate("bino3", "effects/stereo2bino_1")
-# bino4 = instanciate("bino4", "effects/stereo2bino_1")
-
-gone = instanciate("chan1", "pads/gone_1")
-gone1 = gone
-bass303 = instanciate("chan2", "bass/bass303_1")
-apad = instanciate("chan3", "pads/apad_1")
-apad3 = apad
-marimba4 = instanciate("chan4", "mallets/marimba_1")
-vibra1 = instanciate("chan5", "mallets/vibra_1")
-# sheer = instanciate("chan6", "synth_keys/sheer_1")
-pstrings = instanciate("chan7", "guitars_strings/pstrings_1")
-pluckbass = instanciate("chan8", "bass/pluckbass_1")
-lone1 = instanciate("chan9", "synth_keys/lonesine_1")
-equals = instanciate("chan10", "synth_keys/equals_1")
-dakeys = instanciate("chan11", "synth_keys/dakeys_1")
-padarp = instanciate("chan12", "synth_keys/padarp_1")
-keypong = instanciate("chan13", "synth_keys/keypong_1")
-sizzle = instanciate("chan14", "synth_keys/sizzle_1")
-wobble = instanciate("chan16", "bass/wobble_1")
-# reese = instanciate("chan15", "bass/reese_1") # TODO debug midichannel 15
-
-# Clock.latency = .5
-# Clock.midi_nudge = -.235 # latency 1024/48000
-Clock.latency = .5
-Clock.midi_nudge = -.232 # latency 2048/48000
-
-######## marimba patterns
-
-Scale.default = Scale.minor
-
-b1 >> lone1([0,2,1,[5,2]], dur=[.5,.25], tone=linvar([0,1]), oscillator_1_unison_voices=linvar([0,1], 16))
-
-change_bpm(120)
-
-bpm_to(120)
-
-Scale.default = Scale.major
-
-mx >> mixer([None], vdee_mix=0, sm_mix=0)
-dl >> duckless(dot8_mix=0)
-
-mmelody = var(P[-12,0,-2,0,5,-2,0,0,-2,5,0,-2,0,0,5], .25)
-mmelody2 = var(P[-12,0,-2,0,5,-2,0,0,-2,5,0,-2,0,0], .25)
-
-m1 >> vibra1(mmelody, dur=.5, release=.5, decay=.7, attack=0)
-m1.amp=linvar([.75, .45], 15*.25, start=Clock.mod(4))
-m1.fadein(30, fvol=1)
-m1.release = .6
-m1.decay = .8
-
-m1.dur=.25
-m1.vol=1.3
-
-a1 >> apad(
-    P[0, 4, -2],
-    # chords,
-    # dur=P[5,3,8]*2,
-    dur=P[5,3,8],
-    attack=.8,
-    space=0,
-    detail=0,
-    thick_thin=0,
-    oct=4,
-    vol=1,
-    amplify=1,
-).fadein(16, fvol=.8)
-m1.release = linvar([.5, .8], [16,inf], start=Clock.mod(4))
-m1.decay = linvar([.7, .3], [16,inf], start=Clock.mod(4))
-
-a1.curr_players()
-
-.fadeout()
-
-k4.fadeout()
-
-m1.oct = [5, None, None, None, 5]
-
-m1.oct = [5, None, None, None, 6]
-
-mx.vdee_mix = linvar([0,0,.4], PRand(16,24), start=Clock.mod(4))
-
-m1.oct = [5, 4, None, None, 6]
-
-ff >> play("b", dur=.125, rate=linvar([2,4],16), amp=.1, sample=5, pan=linvar([-.8,.8], PRand(2,16)))
-ff.amp = expvar([.01,.1], PRand(6,16), start=Clock.mod(4))
-
-m1.fade(fvol=1.3)
-
-m1.oct = [5, 4, 6, None, 6]
-
-m1.amp=linvar([1, .45], 2*15*.25, start=Clock.mod(4))
-
-Scale.default = Scale.aeolian
-
-ff.degree = Pvar(['b', 'b.', 'bb.'], PRand(4,16))
-
-m2 >> marimba4(mmelody, dur=.25, release=.5, decay=.7, attack=0)
-m2.amp=linvar([.75, .45], 15*.25, start=Clock.mod(4))
-m2.fadein(8, fvol=1.1)
-Scale.default = Scale.dorian
-m2.oct = [None, 4, None, None, None]
-
-ff.fadeout()
-
-m1.fade(fvol=1)
-
-m2.oct = [None, 4, None, 4, 7]
-
-m1.degree = mmelody + (0,2)
-
-Scale.default = Scale.aeolian
-
-m2.degree = mmelody + (0,4)
-
-ff.fadeout(16)
-
-l1 >> lone1(mmelody, dur=.25, reverb_mix=0, delay_mix=0)
-l1.fadein(fvol=1)
-l1.oct = m1.oct
-m1.degree = mmelody2
-l1.degree = mmelody2
-l1.voices = linvar([0,.8],17) # to debug
-l1.tones = linvar([0,.8],13)
-
-l1.degree = 0
-l1.oct = (4,5)
-
-l1.degree = mmelody2
-l1.oct = (4,5,6)
-
-Scale.default = Pvar([Scale.major, Scale.mixolydian, Scale.minor, Scale.dorian],15*.25)
-kk >> play("X..............", dur=.25, amp=1.6, lpf=300, sample=1, sdb=2, output=12)
-kk.fadein(7)
-kk.rate=(1,1.8)
-
-k2 >> play("x...............", dur=.25, amp=3, lpf=400, sample=1, sdb=2, output=12)
-
-kk.degree="X.(..X).."
-
-hh >> play(".-", rate=.3, room2=.1, sdb=2, sample=3, dur=.5)
-hh.pan=P[-1,0,1,0,.5]*.8
-
-hh.degree = ".[--]"
-
-hh.degree = ".[--...]"
-
-hh.degree = ".[---..]"
-
-hh.degree = ".[-----]"
-
-hh.room2 = linvar([.1,1], [8,inf], start=Clock.mod(4))
-
-d2 >> play("X...", dur=.25, amp=.8, lpf=200, sample=1, sdb=2, output=12)
-d2.fadein(7.5)
-d2.amp=1.5
-
-hh.degree = "-[-----]"
-
-hh.rate = linvar([.3,1.5], [30, inf], start=Clock.mod(4))
-
-hh.degree = "[-----]"
-d2.degree = "[XXX]..(.X)."
-
-m1.oct = [5, 4, None, None, 6]
-d2.degree = "X..X."
-hh.amp=2
-hh.pan=0
-hh.room2=0
-mx.vdee_mix=0
-mx.sm_mix=0
-hh.degree = ".-"
-
-dd.degree = "x..x."
-dd.sample=2
-
-d2.lpf=400
-kk.lpf=400
-d3 >> play("V(..(xv))", output=12, lpf=600, amp=2).fadein()
-
-m1.fadeout(32)
-
-d3.pause(8,32)
-
-d2.degree = "([XXX]X)(...X)"
-d3.sample = 2
-
-d4 >> play("c", dur=[1/3,2/3], rate=4, lpf=600, amp=2)
-d2.degree = "X..X."
-d2.sample=6
-
-d4.sample = 0
-d4.sdb = 0
-d4.degree = "c"
-
-d4.dur=Pvar([[1/3,2/3],1/3,[1/6,1/6,2/3]], [16,8,8])
-d4.pan = linvar([0,.8,.3,-.9], PRand(8,16), start=Clock.mod(4))
-
-Scale.default = Scale.majorPentatonic
-
-d4.rate=P(3,1,6)
-
-d4.rate=P(6,3,12)
-d4.amp=3
-
-Scale.default = Scale.chinese
-
-d4.rate=P*(3,1,6,9,15)
-
-d4.dur=[1/3,2/3]
-
-d4.rate=4
-d4.amp=4
-
-d4.fade(fvol=.8)
-
-hh.rate = 1
-
-d5 >> play("s.", dur=[.4,.3,.3], rate=[1,1.2,1], amp=2, sample=0)
-d5.rate = linvar([1,4], 32)
-d4.pan = [-1, 0, 0, 1]
-
-mx.sm_mix=linvar([0,.2], 16, start=Clock.mod(4))
-
-d4.degree = "c{c.}"
-
-d5.degree = "s"
-d5.room2=.6
-
-Scale.default = Scale.majorPentatonic
-
-d5.curr_players()
-
-ff.fadeout(32)
-
-d5.degree = "s{s.}"
-
-l1.fadeout(16)
-m2.fadeout(16)
-kk.fadeout(16)
-hh.fadeout(32)
-bpm_to(130)
-
-change_bpm(140)
+change_bpm(130)
 Root.default = 0
 # tt >> fxstack(ru_on=False, ens_on=False, vdee_on=False, sm_on=False, deda_on=False)
-Scale.default = Scale.chromatic
 pitches = [0, 2, 5, 2, 0, -2, 5, 4]
 mx >> mixer([None], vdee_mix=0)
-dl >> duckless(dot8_mix=.5)
-d3.fadeout(24)
+dl >> duckless(dot8_mix=linvar([0,.5], [16, inf], start=Clock.mod(4)))
 
 a1 >> apad(
     P[0, 4, -2],
@@ -280,12 +24,15 @@ mx.deda_drywet = linvar([0, .4], [16,inf], start=Clock.mod(4))
 k_all.fadeout(15)
 Scale.default = Scale.major
 
+d3.fadeout(24)
+
+m_all.fadeout()
+
 d_all.fadeout(15)
 
 k2 >> play("..(...x)(...(.X))", dur=.25, lpf=900, output=12, amp=2)
 k2.fadein(16)
 
-m_all.fadeout()
 
 # delay
 a1.degree = P[0,4,-2] + P(0,4,5)
@@ -321,6 +68,10 @@ a4.body = linvar([0, 1, .4, .8, 0, .6],PRand(2,24, seed=0), start=Clock.mod(4))
 a1.fade(16, fvol=.8)
 k2.degree = "(V).(...x)(...(.X))"
 
+a4.fade(fvol=.5)
+
+ff.fadeout()
+
 Scale.default = Scale.majorPentatonic
 k2.pause(8,64)
 
@@ -337,7 +88,8 @@ a4.oct = 4
 a4.arp = linvar([0,1,.4,.8,0,.6],PRand(2,24), start=Clock.mod(4))
 cp >> play(".(.**.)(.*..)(...(.O))", dur=.25, lpf=8000, hpf=1000, amp=2, rate=2, pan=var([-.5,0,.7,0],PRand(1,4)/4))
 cp.sample = (3,4)
-cp.sdb=2
+cp.sdb=0
+a4.stop()
 
 cc.fadeout(24)
 a4.fade(32, fvol=.5)
@@ -351,11 +103,13 @@ s1.sus = .45
 # s1.level=.5
 s1 + P(0,5)
 s1.amp = [0,1,0,0,1,0]
+cp.fade(12, fvol=.1)
 
 s1.degree = var([0,5,2,3],[8,4,2,2], start=Clock.mod(4)) + (0,5)
 # pitches = var([0, 2, 5, 2, 0, -2, 5, 4],[1,1,2,.5,.5,.5,.5,.5])
 # s1.degree = pitches
 
+cp.fadeout()
 Scale.default = Scale.minor
 s1.level=.5
 s1.dur=.5
@@ -366,11 +120,12 @@ s1 + (0,2)
 s1 + [(0,2), 0, 5, 2]
 s1.dur = [.5,.25,.25]
 
+print(Scale.names())
+
 s1.amp = [0,1,0,0,1,1]
 
 hh >> play("..-.", sdb=1, amp=2, rate=1.2, dur=.25, sample=6, pan=linvar([-.5,.5],16))
 
-cp.fadeout()
 
 s1.amp = [1,1,0,0,1,1]
 
@@ -390,6 +145,9 @@ k3 >> play(
 )
 k3.fadein(16, fvol=1)
 
+Root.default = var(PTri(12), .25)
+
+Scale.default = Scale.locrian
 hh >> play("..(---(b--(ib)))(.-)", sdb=1, amp=2, rate=1.2, dur=.25, sample=6)
 
 s1.dur = Pvar([[.5,.25,.25],.5], 32, start=Clock.mod(4))
@@ -403,6 +161,7 @@ k3.lpf = linvar([200,800], [32,inf], start=Clock.mod(4))
 k3.degree = "<V.x.>"
 k3.amp=2.5
 
+Scale.default = Scale.chinese
 k3.degree = "<V.x.><o.[(...X)X]>"
 
 k3.degree = "<V.x.><o(..[XV])[(...X)X]>"
@@ -412,6 +171,7 @@ k3.sample = 0
 k1.lpf = 800
 s1.cutoff=linvar([1,.4],32, start=Clock.mod(4))
 
+Scale.default = Scale.minor
 mx.deda_drywet = linvar([.3, 0], [16,inf], start=Clock.mod(4))
 
 mx.deda_on = 0
@@ -424,7 +184,7 @@ s1.degree = pitches
 s1.vol=1.3
 s1 + [(0,2), 0, 5, 2]
 
-mx.sm_mix = linvar([.2, 0], 32, start=Clock.mod(4))
+mx.sm_mix = linvar([0, .1], 16, start=Clock.mod(4))
 
 k3.degree = Pvar(["V.x.","<V.x.><.(..[XV])[(...X)X]>"],16, start=Clock.mod(4))
 # k3.pause(8,32)
@@ -443,7 +203,7 @@ s1.dur=P[P[.5, .5, .5, P*(.25,.25)],.25,.25]
 s1.vol=1
 
 # un peu de noise
-mx.ru_blend=linvar([0,.3], [64,32,inf], start=Clock.mod(4))
+mx.ru_blend=linvar([0,.3], [32,64,inf], start=Clock.mod(4))
 
 Scale.default = Scale.minorPentatonic
 
@@ -455,6 +215,7 @@ s2.oct = Pvar([(4,5), 3, (3,4,5)], [2,4,3,3])
 s2.amp = P[.8, .7, .5, 1.1, .9] * 2
 
 s2.dur = var([.25, .5, 1/3], [10,4,2])
+mx.ru_on = 0
 
 k3.degree = "<V.x.>"
 
@@ -475,10 +236,11 @@ bb.curr_players()
 
 a1.fadeout()
 
-# Wait forf the right moment
-hh.stop()
+# Wait for the right moment
+hh.fadeout()
 
 cp.fadeout(32)
+
 Scale.default = Scale.minor
 bb >> pluckbass(
     [0],
@@ -528,7 +290,7 @@ l2 >> pluck(
     pan=[-1, 0, 1],
 )
 
-l2.dur=var([1,.5,.25],[20,8,4])
+l2.dur = var([1,.5,.25],[20,8,4])
 l2.degree = chords + P[0,2,0,-2,0,3,0,5,4,0] + P(0,2)
 l2.pause(4, 16, 8)
 
@@ -561,17 +323,16 @@ Root.default = 0
 
 Root.default = var([0,1,2,3], [16,16,16,inf], start=Clock.mod(4))
 
-Root.default = var(PTri(12), .25)
+Root.default = var(PTri(12), .5)
 
 k3.degree = "V......."
+k2.stop()
 
 somegroup = Group(l1, l2, a1)
 somegroup = Group(bb, l2, a1)
 somegroup.only()
 
-Root.default = 0
-
-bb >> bass303(
+b2 >> bass303(
     chords2,
     # dur=PDur(3, 8),
     dur=2,
@@ -584,8 +345,8 @@ bb >> bass303(
     reso=linvar([0, 1], 24),
     decay=linvar([0, 1], 48),
 )
-bb.fadein(fvol=.95)
-b2 >> pluckbass(
+b2.fadein(fvol=.95)
+bb >> pluckbass(
     chords2,
     # dur=PDur(3, 8),
     dur=2,
@@ -598,8 +359,9 @@ b2 >> pluckbass(
     reverb=linvar([0,1],24, start=Clock.mod(4)),
     buzz=linvar([.3,.7],28, start=Clock.mod(4)),
 )
-b2.fadein(fvol=.95)
+bb.fadein(fvol=.95)
 
+Root.default = 0
 l1.fade(24, fvol=.8)
 
 bb.dur = var([2,.5,1/3,.25], 8, start=Clock.mod(4))
@@ -612,6 +374,8 @@ k5 >> play(
     amp=1.6,
     output=12
 )
+
+dl >> duckless(dot8_mix=linvar([0,.5], [16, inf], start=Clock.mod(4)))
 
 k5.pause(8,32)
 
@@ -629,6 +393,7 @@ l1 >> pluck(
 l1.pause(4, 16)
 a1.stop()
 
+dl >> duckless(dot8_on=0)
 k6 >> kicker(
     "<(VVV(V[.V]V[VV]))(...V)>",
     # "<V...>",
@@ -637,18 +402,196 @@ k6 >> kicker(
     dur=.5,
     amp=1.4,
     crush=8,
-    bits=linvar([6, 2], 24, start=Clock.mod(4)),
+    bits=linvar([6, 2], [24,48], start=Clock.mod(4)),
     output=12,
 )
 
 a4 >> gone([0], dur=4, body=0, arp=0, pitch=0, oct=3, dull=linvar([0,1,.4,.8,0,.6],PRand(2,24), start=Clock.mod(4)))
-a4.fadein(32, fvol=1.1)
+a4.fadein(32, fvol=.8)
 # a4.span(srot(32), .5)
 a4.body = linvar([0,1,.4,.8,0,.6],PRand(2,24), start=Clock.mod(4))
+Scale.default = Scale.minorPentatonic
 
-a4.curr_players()
+k_all.fadeout()
+
+b2.fadeout()
+
+l_all.fadeout(64)
 
 
-bpm_to(200, 24)
+b1 >> play("{k.[ccc]..[***bb*]}", dur=[.25,.5], amp=2, rate=PWhite(2.5,4))#.fadeout()#d$.fadein()
 
-bpm_to(60, 24   )
+
+kk >> play("[vvvX]", rate=linvar([.5,2.6], [32,inf], start=Clock.mod(4)))#.fadein(32)
+
+kk.fadeout()
+
+
+
+
+
+
+
+
+
+
+
+
+
+bpm_to(160, 24)
+
+change_bpm(160)
+
+bb.fadeout()
+
+d_all.fadeout()
+
+l_all.fadeout()
+
+
+k2 >> play("v..vb.v.", dur=.25, amp=2, lpf=600, hpf=60, output=12).fadeout()
+
+hh >> play("-.-....-", dur=.25, rate=1, amp=4, sample=3)
+
+c5 >> play(".cc.cc.c", amp=3.5, dur=.25, rate=2.5, room2=1).fadein(26)
+
+k3 >> play("X..X..X.", dur=.25, amp=2, lpf=1000)
+
+hh.amp=6
+hh.rate=linvar([2,4],PRand(4,16, seed=2), start=Clock.mod(4))
+hh.pan=linvar([-.8,.8], PRand(4,16))
+c5.rate=linvar([4,7],PRand(4,16, seed=2), start=Clock.mod(4))
+
+k2.sample=0
+
+h2 >> play("..-.", amp=5.5, rate=(.8,1.2), sample=4, dur=.5)
+
+c4 >> play(".c..", amp=3, dur=1/3, rate=2.5, room2=1)
+c4.amplify = linvar(P[.4,1,.7,1.3,.6,1.2]*.75, PRand(8,32,seed=5)[:12], start=Clock.mod(4))
+
+hh.rate=1
+c3 >> play("c..", amp=2.5, dur=1/3, rate=3, room2=1)
+c3.amplify = linvar(P[.4,1,.7,1.3,.6,1.2]*.75, PRand(8,32,seed=4)[:12], start=Clock.mod(4))
+
+c_all.fadeout(16)
+
+l2 >> lone1(
+    chords2,
+    dur=.5,
+    sus=linvar([.3, 3], 16),
+    oct=(4,5),
+    amp=1,
+    cutoff=.4,
+    vol=1.6,
+    # room2=1,
+    pan=[-1, 0, 1],
+).fadein(16, fvol=1.4)
+l2.voices = linvar([0,1],32)
+
+k2 >> play("V..V..V.", dur=.25, amp=2, lpf=900, output=12)
+k3.stop()
+
+# l2 >> vibra1(
+#     chords,
+#     dur=cascara*4/3,
+#     sus=linvar([.3, 3], 16),
+#     oct=(4,5),
+#     amp=1,
+#     cutoff=.4,
+#     vol=1.3,
+#     # room2=1,
+#     pan=[-1, 0, 1],
+# )
+
+k2 >> play("<V.><X.>", dur=2/3, amp=2, lpf=900, output=12)
+c5 >> play(".c.c.c.cc", amp=1.7, dur=1/3, rate=4, room2=1)
+c5.amplify = linvar(P[.4,1,.7,1.3,.6,1.2]*.75, PRand(8,32,seed=3)[:12], start=Clock.mod(4))
+
+c1 >> play("c.c.c.cc.", amp=4.5, dur=1/3, rate=6, room2=1)
+c1.amplify = linvar(P[.4,1,.7,1.3,.6,1.2]*.75, PRand(8,32,seed=2)[:12], start=Clock.mod(4))
+
+s2 >> blip(
+    [0],
+    dur=P[.5, .5, 1]*2/3,
+    amp=P[.7, .8, .9, 1, 1.1, 1, .9, .8] * 2,
+    pan=[-1,0,1,0],
+    oct=P[5, 7, 6, 7]-P[0,1,0],
+    sus=linvar([.3, 2], [48], start=Clock.mod(4)),
+)
+s2.fadein(16, fvol=2)
+
+s2.dur=.5
+
+hh.fadeout(8)
+
+Scale.default = Scale.chinese
+
+s2.degree=chords
+
+k2 >> play("V.", lpf=800, dur=.5, output=12, amp=1.4)
+
+b2 >> bass303(
+    chords,
+    # dur=PDur(3, 8),
+    dur=2*2/3,
+    sus=bb.dur - .1,
+    oct=4,
+    amp=2,
+    room2=0,
+    # cutoff=0,
+    cutoff=linvar([0, 1], 32),
+    reso=linvar([0, 1], 24),
+    decay=linvar([0, 1], 48),
+)
+b2.fadein(fvol=.95)
+bb >> pluckbass(
+    chords,
+    # dur=PDur(3, 8),
+    dur=2*2/3,
+    sus=bb.dur - .1,
+    oct=4,
+    amp=2,
+    room2=0,
+    drive=linvar([.2,1],16, start=Clock.mod(4)),
+    width=linvar([.2,1],32, start=Clock.mod(4)),
+    reverb=linvar([0,1],24, start=Clock.mod(4)),
+    buzz=linvar([.3,.7],28, start=Clock.mod(4)),
+)
+bb.fade(fvol=1)
+
+k1.sample=2
+
+c5.fadeout(24)
+c3.fadeout(24)
+
+c_all.fadeout()
+
+bb.dur = var(P[2,.5,1/3,.25]*4/3, 8, start=Clock.mod(4))
+b2.dur = var(P[2,.5,1/3,.25]*4/3, 8, start=Clock.mod(4))
+
+Scale.default = Scale.minor
+
+k2 >> play("V.", lpf=800, output=12, amp=1.4)
+c2 >> play(".*.*.*.**", amp=2.5, dur=1/3, rate=2, room2=1).fadein()
+c2.amplify = linvar(P[.4,1,.7,1.3,.6,1.2]*.75, PRand(8,32,seed=3)[:12], start=Clock.mod(4))
+
+s2.degree=[0,2,0,5]+chords
+l1.degree=[2,0,0,4]+chords
+
+l1.degree = chords + P[0,2,0,-2,0,3,0,5,4,0] + P(0,2)
+s2.degree = chords + P[0,2,0,-2,0,3,0,5,4,0] + P(0,2)
+
+k2 >> play("V..V..V.", dur=.25, amp=2, lpf=900, output=12)
+bb.dur = var(P[2,.5,1/3,.25], 8, start=Clock.mod(4))
+b2.dur = var(P[2,.5,1/3,.25], 8, start=Clock.mod(4))
+
+l1.dur=cascara
+c_all.dur=.25
+s2.dur=[.5,.25,.25]
+
+Root.default = var(PTri(12),.5)
+
+bpm_to(260, 24)
+
+Root.default = 0
+bpm_to(30, 16)

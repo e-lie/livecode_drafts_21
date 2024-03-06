@@ -392,4 +392,10 @@ k7.fadeout(32)
 l1.fadeout(16)
 cp.fadeout()
 
+l1.curr_players()
+
+k5.fadeout(32)
+
+l.fadeout(16)
+
 s1.only()

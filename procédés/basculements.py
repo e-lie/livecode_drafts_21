@@ -1,4 +1,57 @@
+from FoxDot.preset import *
 
+# OMG j'ai découvert le paramètre bpm de chaque synth_keys
+
+k1 >> play("X.", bpm=120)
+hh >> play("-", dur=cascara, bpm=120)
+k2 >> play(".{....c}c{...c}", dur=.25, bpm=120, rate=[1,1.1])
+
+k2 >> play("c{.c}c{c}", dur=.5, bpm=90)
+
+hh >> play(".-", dur=cascara/2, bpm=linvar([120, 90], [8,inf], start=Clock.mod(4)))
+
+k1.bpm=90
+
+hh.degree = "-"
+
+# Exemple 4 : 150 -> 120 elaboré
+
+bassline = var([0,0,0,-1,5], 4)
+
+change_bpm(150)
+k1 >> play("v{.x}", dur=1/2)
+hh >> play("{..-}{--[--]}", sdb=1, sample=(3,5), dur=cascara)
+b1 >> pluckbass(bassline+[0,2], dur=2, sus=3.5, oct=[3,4])
+b1.dur = [2,1]
+
+k2 >> play("X", dur=5/4, output=12).fadein()
+
+bassline2 = var([0,0,0,-1,5], 2*5/4)
+
+b2 >> blip(bassline2, dur=P[.5]*5/4, sus=2, oct=4).fadein()
+
+# Besoin de pouvoir créer plusieur Clocks et switcher la clock par défaut pour pas avoir a faire change_bpm
+# OMG
+
+# Exemple 3 : switcher de 150 à 120 => 4/5
+
+change_bpm(150)
+d1 >> play("X-")
+b1 >> bbass([0,2,-2,5,2], dur=[1/2,1], oct=3)
+
+d2 >> play("X", dur=5/4).fadein()
+b2 >> bbass([0], dur=P[1,1/2]*5/4, oct=3).fadein()
+
+b1.fadeout()
+
+d1.stop()
+b2.dur = [1,.5]
+d2.dur = 1
+change_bpm(120)
+
+d3 >> play("-[--]", dur=1/2)
+
+# Exemple 2 ?
 
 change_bpm(130)
 
@@ -34,6 +87,8 @@ m1.sus=1
 m1.dur=3/8
 m1.degree = [0,0,2,1]
 m1.oct=[4,5,6]
+
+### Exemple 1 ?
 
 # cp.degree = ".*"
 
