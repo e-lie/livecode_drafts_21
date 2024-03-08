@@ -10,7 +10,7 @@ kick4 = Player()
 clave = Player()
 shaker = Player()
 kicks = Group(kick1, kick2, kick3, kick4)
-percus = Group(kick1, kick2, kick3, kick4, clave, shakers, hh)
+percus = Group(kick1, kick2, kick3, kick4, clave, shaker, hh)
 
 change_bpm(110)
 
@@ -24,7 +24,7 @@ vibra.amp=linvar([.75, .45], 15*.25)
 vibra.fadein(30, fvol=1)
 vibra.release = .6
 vibra.decay = .8
-vibra.span(srot(24), .2)
+vibra.span(srot(32), .2)
 
 vibra.release = linvar([.5, .8], [16,inf], start=Clock.mod(4))
 vibra.decay = linvar([.7, .3], [16,inf], start=Clock.mod(4))
@@ -37,6 +37,7 @@ vibra.oct = [5, 4, None, None, 6]
 
 liblip >> play("b", dur=.125, rate=linvar([3,8],16), amp=.1, sample=5)
 liblip.faderand()
+liblip.mpan(mrot(256))
 
 vibra.fade(fvol=1.3)
 
@@ -51,15 +52,15 @@ marimba.amp=linvar([.75, .45], 15*.25, start=Clock.mod(4))
 marimba.fadein(8, fvol=1.1)
 Scale.default = Scale.dorian
 marimba.oct = [None, 4, None, None, None]
+marimba.span(srot(48),.5)
 
 vibra.fade(fvol=1)
 
+liblip.mpan(mrot(16))
 marimba.oct = [None, 4, None, 4, 7]
 
 marimba.release = linvar([.5, .8], [16], start=Clock.mod(4))
-
 marimba.decay = linvar([.7, .3], [16], start=Clock.mod(4))
-
 marimba.attack = linvar([0, .3], [24], start=Clock.mod(4))
 
 vibra.degree = mmelody + (0,2)
@@ -70,13 +71,14 @@ liblip.fade(fvol=.2)
 bpm_to(120, 32)
 marimba.degree = mmelody + (0,4)
 
+liblip.mpan(mrot(256))
 lonesynth >> lone1(mmelody, dur=.25, reverb_mix=0, delay_mix=0)
 lonesynth.fadein(fvol=1)
 lonesynth.voices = linvar([0,1],32)
 lonesynth.oct=vibra.oct
+lonesynth.span(srot(4), linvar([0,.2,0,.8], 16))
 
 lonesynth.fade(fvol=1.2)
-
 
 vibra.degree=mmelody2
 lonesynth.degree=mmelody2
@@ -110,25 +112,24 @@ lonesynth.amp=1.8
 
 lonesynth.faderand()
 
-liblip.fadep("rate", dur=48, fvalue=.1)
-liblip.fade(fvol=1)
-
 Scale.default = Pvar([Scale.major, Scale.mixolydian, Scale.minor, Scale.dorian],15*.25)
 
 kick1 >> play("x"+14*'.', dur=.25, amp=1.2, lpf=300, sample=1, sdb=0, output=12)
 kick1.fadein(15)
 kick1.rate=(1,1.8)
+liblip.fadep("rate", dur=48, fvalue=.1)
+liblip.fade(fvol=1)
+
+kick1.degree="x.(x..).."
 
 kick2 >> play("V"+15*'.', dur=.25, amp=1, lpf=300, sample=1, sdb=0, output=12)
-
-kick1.degree="x.(..x).."
-
 
 hh >> play(".-", rate=.3, room2=0, sdb=0, sample=3, pan=linvar([-.8,.8], 48))
 
 hh.degree = ".[--]"
 
 hh.pan=P[-1,0,1,0,.5]*.8
+hh.mpan(mrot(8))
 
 hh.degree = ".[--...]"
 bpm_to(130, 128)
@@ -170,14 +171,11 @@ vibra.fadeout(32)
 
 kick4.pause(8,32)
 
-kick3.degree = "([XXX]X)(...X)"
-
 kick4.sample = 2
-kick3.amp=.8
-kick4.solo(0)
 
 clave >> play("c", dur=[1/3,2/3], rate=4, lpf=600, amp=2)
 kick3.degree = "X..X."
+kick3.amp=.8
 kick3.sample=6
 
 Scale.default = Pvar([Scale.chromatic, Scale.majorPentatonic, Scale.minor],8)
@@ -217,7 +215,6 @@ clave.amp=4
 
 clave.dur=Pvar([[1/3,2/3],1/3,[1/6,1/6,2/3]], [16,8,8])
 
-Clock.meter = (4,4)
 Root.default = 0
 
 Scale.default = Scale.chinese
@@ -231,10 +228,25 @@ shaker.curr_players()
 
 liblip.fadeout(32)
 
-d5.degree = "s{s.}"
+shaker.degree = "s{s.}"
 
-l1.fadeout(16)
+lonesynth.fadeout(16)
 marimba.fadeout(16)
 kick1.fadeout(16)
+clave.fadeout(64)
+shaker.fadeout(72)
 hh.fadeout(32)
-bpm_to(130, 24)
+pad1 >> apad(
+    P[0, 4, -2],
+    dur=P[5,3,8]*2,
+    attack=.8,
+    space=0,
+    detail=0,
+    thick_thin=0,
+    oct=4,
+    vol=1,
+    amplify=1,
+)
+pad1.thick_thin=linvar([0,1,.4,.8,0,.6], PRand(2,24), start=Clock.mod(4))
+pad1.degree = P[0,4,-2] + P(0,4)
+kicks.fadeout(15)
