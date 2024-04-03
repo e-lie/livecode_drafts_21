@@ -22,16 +22,19 @@ mx.fadep("deda_drywet", dur=16, fvalue=0)
 
 bpm_to(160, 24)
 
-kick3.stop()
+kick4.stop()
 
 change_bpm(160)
 pbass.fadeout()
 percus.fadeout()
 melos.fadeout()
 
+pad2.fadeout(16)
+
 ## Ok le banger de l'année
-acidbass >> tb303([0,2,4,3], dur=.25, oct=var([5,4,5,6],1))
+acidbass >> bass303([0,2,4,3], dur=.25, oct=var([5,4,5,6],1))
 acidbass.fadein(fvol=.8)
+acidbass.fade(fvol=1.2)
 acidbass.span(srot(32), .5)
 acidbass.decay = 0
 acidbass.envmod = 0
@@ -49,14 +52,18 @@ Root.default = 0
 
 acidbass.envmod = linvar([0,.4,0], [8,8,16], start=Clock.mod(4))
 
-kick1 >> play("<v..v..v.><x..x..x.>", dur=.25, amp=1.5, lpf=600, hpf=60, output=12)
-
 hihat1 >> play("..-.....", dur=.25, rate=1, amp=2, sample=3)
+bongo1 >> play(".c..{..c}..c", amp=3, dur=.25, rate=8, room2=.4).fadein(26)
+bongo1 >> play(".c..c..c", amp=3, dur=.25, rate=8, room2=.4).fadeout(26)
+hihat1 >> play("..--....", dur=.25, rate=1, amp=2, sample=3)
+hihat1 >> play("<..-{-.}..-.><...{bbbb}....>", dur=.25, rate=1, amp=2, sample=3)
+
+kick1 >> play("<v..v..v.><x..x..x.>", dur=.25, amp=1.5, lpf=600, hpf=60, output=12)
 
 acidbass.envmod = linvar([0,.4,0], [8,8,inf], start=Clock.mod(4))
 
 hihat1 >> play("*.*....*", dur=.25, rate=1, amp=2, sample=3)
-
+.8
 acidbass.envmod = linvar([0,.4,0], [8,8,16], start=Clock.mod(4))
 acidbass.envmod = linvar([0,.7,0], [8,8,inf], start=Clock.mod(4))
 acidbass.envmod = linvar([0,.7,0], [8,8,16], start=Clock.mod(4))
@@ -69,7 +76,6 @@ acidbass.fadep("cutoff", fvalue=.3, dur=16)
 
 kick1 >> play("<v..vb.v.><x..x..x.>", dur=.25, amp=1.5, lpf=600, hpf=60, output=12)
 
-bongo1 >> play(".c..c..c", amp=3, dur=.25, rate=8, room2=.4)#.fadein(26)
 
 acidbass.fadep("cutoff", fvalue=.1, dur=16)
 
@@ -82,7 +88,7 @@ hihat1.mpan(mrot(128))
 
 bongo1 >> play(".c..{ccx.}{..cx}.{ccx.}", amp=3, dur=.25, rate=8, room2=.4)#.fadein(26)
 
-bongo2 >> play(".cc.cc.c", amp=3, dur=.25, rate=7, room2=.4)#.fadein(26)
+bongo2 >> play(".cc.cc.c", amp=3, dur=.25, rate=7, room2=.4).fadein(26)
 
 bongo2.mpan(mrot(32))
 
@@ -90,12 +96,14 @@ bongo1 >> blip(0, dur=.25, room2=.4, amp=P[0,1,1,0,1,1,0,1]*3, oct=7)#.fadein(26
 bongo1 >> blip([0,2,4,3], dur=.25, room2=.4, amp=P[0,1,1,0,1,1,0,1]*4, oct=7)#.fadein(26)
 bongo1.oct=var(P[5,4,5,6]+1,1)
 
+pad1.stop()
+
 Scale.default = Pvar([Scale.chinese, Scale.minorPentatonic], [48,16])
 
 bongo1.pause(8,32,8)
 bongo2.pause(8,32,12)
 kick1 >> play("V..V..V.", dur=.25, amp=2, lpf=1000)
-kick1 >> play("V..V..V.", dur=.25, amp=2, lpf=1000)
+kick1 >> play("V.V...V.", dur=.25, amp=2, lpf=1000)
 kick1 >> play("V.VV..V.", dur=.25, amp=2, lpf=1000)
 kick1 >> play("{VVV.}.{V..}V..V.", dur=.25, amp=2, lpf=1000)
 

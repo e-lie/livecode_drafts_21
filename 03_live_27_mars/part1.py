@@ -22,7 +22,7 @@ pad1.oscillator_3_detune_power = 0
 pad1.envelope_1_attack = .5
 pad1.body=.2
 pad1.dull=.2
-pad1.span(srot(32), linvar([.2,.8],24))
+# pad1.span(srot(32), linvar([.2,.8],24))
 
 pad1.body = linvar([0,1,.4,.8,0,.6],PRand(2,24,seed=2)[:12], start=Clock.mod(4))
 pad1.vol = linvar([.8,1,.7,1.3,.6,1.2], PRand(8,32,seed=2)[:12], start=Clock.mod(4))
@@ -137,7 +137,7 @@ lonesynth.degree = [0,2,None,-2, None]
 lonesynth.delay_mix = 0
 lonesynth.reverb_mix = 0
 lonesynth.oct=7
-lonesynth.fadein(fvol=2)
+lonesynth.fadein(16,fvol=1.2)
 
 lonesynth.dur=3
 
@@ -146,8 +146,8 @@ lonesynth.oct=([6,7,8],[3,4,2,3])
 lonesynth.dur=1
 
 lonesynth >> lone1([[0,None,0,None],4,[None,5],1], oct=([6,7,8],[3,4,2,3]), dur=.25, vol=.7)
-lonesynth.voices = linvar([0,1],32)
-lonesynth.vol=1.6
+lonesynth.voices = linvar([0,1],32, start=Clock.mod(4))
+lonesynth.vol=1.2
 
 kick1 >> play(
     "<{V.}x><v>",
@@ -161,7 +161,7 @@ kick1 >> play(
 kick1.mpan(mrot(6))
 hh >> play("{[--]-.}", amp=3, rate=3, dur=.25).mpan(mrot(48))
 
-lonesynth.fade(16, fvol=1.3)
+lonesynth.fade(16, fvol=1)
 
 wbass >> wobble3([0], oct=3, dur=24, fm_tone=0)
 wbass.fadein(24,fvol=.6)
@@ -178,11 +178,11 @@ wbass.span(srot(24))
 wbass.fm_tone=linvar([0,.3],16, start=Clock.mod(4))
 wbass.span(srot(8))
 
-
 ticks.fadeout()
 lonesynth.fadeout()
 hh.fadeout()
 kick1.fadeout(16)
+
 ## attendre que ce soit en bas
 wbass.fade(16, fvol=1.1)
 wbass.fm_tone=linvar([0,.4],[32,inf], start=Clock.mod(4))

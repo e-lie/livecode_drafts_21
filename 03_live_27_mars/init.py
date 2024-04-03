@@ -1,4 +1,5 @@
 from FoxDot.preset import *
+
 Clock.latency = .5
 Clock.midi_nudge = -.232 # latency 2048/48000
 #
@@ -50,6 +51,7 @@ marimba = Player()
 lonesynth = Player()
 clave = Player()
 shaker = Player()
+crash = Player()
 
 kicks = Group(kick1, kick2, kick3, kick4)
 percus = Group(kick1, kick2, kick3, kick4, hh, percu1, percu2, clave, shaker)

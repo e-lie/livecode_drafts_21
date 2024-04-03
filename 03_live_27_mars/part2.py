@@ -107,7 +107,7 @@ lonesynth.degree = -2
 lonesynth.degree=mmelody2
 
 lonesynth.oct = (4,5)
-lonesynth.fade(fvol=.1)
+lonesynth.fade(12,fvol=.1)
 lonesynth.amp=1.8
 
 lonesynth.faderand()
@@ -120,16 +120,18 @@ kick1.rate=(1,1.8)
 liblip.fadep("rate", dur=48, fvalue=.1)
 liblip.fade(fvol=1)
 
+liblip.fadeout(32)
+
 kick1.degree="x.(x..).."
 
 kick2 >> play("V"+15*'.', dur=.25, amp=.8, lpf=300, sample=1, sdb=0, output=12)
 
-hh >> play(".-", rate=.3, room2=0, sdb=0, sample=3, amp=4, pan=linvar([-.8,.8], 48))
+hh >> play(".-", rate=.3, room2=0, sdb=0, sample=3, amp=2, pan=linvar([-.8,.8], 48))
 
 hh.degree = ".[--]"
 
 hh.pan=P[-1,0,1,0,.5]*.8
-hh.mpan(mrot(8))
+hh.mpan(.5)
 
 hh.degree = ".[--...]"
 bpm_to(130, 128)
@@ -144,7 +146,6 @@ hh.room2 = linvar([0,1], [8,inf], start=Clock.mod(4))
 
 kick3 >> play("X...", dur=.25, amp=.8, lpf=200, sample=1, sdb=0, output=12)
 kick3.fadein(7.5)
-kick3.amp=1.2
 
 hh.degree = ".[-----]"
 
@@ -165,7 +166,8 @@ hh.mpan(mrot(16))
 
 kick3.lpf=400
 kick1.lpf=400
-kick4 >> play("V(..(xv))", output=12, lpf=600, amp=.8).fadein()
+kick4 >> play("V(..(xv))", output=12, lpf=600, amp=.8)
+kick4.fadein(fvol=.8)
 kick1.fadeout()
 
 vibra.fadeout(32)
@@ -179,6 +181,8 @@ kick3.degree = "X..X."
 kick3.amp=.8
 kick3.sample=6
 clave.mpan(mrot(16))
+clave.mpan(var([0,1,2,3],1))
+clave.mpan(.5)
 
 Scale.default = Pvar([Scale.chromatic, Scale.majorPentatonic, Scale.minor],8)
 
@@ -206,10 +210,12 @@ clave.rate=4
 clave.fade(fvol=.8)
 
 shaker >> play("s..", dur=[.4,.3,.3], rate=[1,1.2,1], amp=3, sample=0)
-shaker.rate = linvar([1,4], 32)
-shaker.room2=.6
 
-shaker.degree = "s."
+shaker.degree = "s.s"
+
+shaker.rate = linvar([1,4], 32, start=Clock.mod(4))
+shaker.room2 = .6
+
 clave.amp=2.5
 
 shaker.degree = "s"
