@@ -76,6 +76,8 @@ percu1.mpan(mrot(7))
 pad2.body = linvar([0, 1, .4, .8, 0, .6],PRand(2,24, seed=0), start=Clock.mod(4))
 
 pad1.fade(16, fvol=.8)
+
+dl >> duckless(dot8_mix=.25)
 kick1.degree = "(V).(...x)(...(.X))"
 
 pad2.fade(32, fvol=.6)
@@ -88,7 +90,7 @@ percu1 >> play("..(c.)(.*)", dur=.25, rate=var([3,4]), amp=2.3, room2=0, hpf=700
 
 # Attendre la pause
 kick1.sample=var([0,1,2,3], 64)
-dl >> duckless(dot8_mix=var([0,.5],64))
+dl >> duckless(dot8_mix=var([0,.3],64))
 pad2.pitch = linvar([0,1,.4,.8,0,.6],PRand(2,24, seed=2), start=Clock.mod(4))
 
 mx.vdee_mix = linvar([0,.2], [16,inf], start=Clock.mod(4))
