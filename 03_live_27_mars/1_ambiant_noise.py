@@ -22,7 +22,7 @@ pad1.oscillator_3_detune_power = 0
 pad1.envelope_1_attack = .5
 pad1.body=.2
 pad1.dull=.2
-# pad1.span(srot(32), linvar([.2,.8],24))
+pad1.span(srot(32), linvar([.2,.8],24))
 
 pad1.body = linvar([0,1,.4,.8,0,.6],PRand(2,24,seed=2)[:12], start=Clock.mod(4))
 pad1.vol = linvar([.8,1,.7,1.3,.6,1.2], PRand(8,32,seed=2)[:12], start=Clock.mod(4))
@@ -144,10 +144,14 @@ lonesynth.dur=3
 lonesynth.oct=([6,7,8],[3,4,2,3])
 
 lonesynth.dur=1
+lonesynth.dur=.5
 
 lonesynth >> lone1([[0,None,0,None],4,[None,5],1], oct=([6,7,8],[3,4,2,3]), dur=.25, vol=.7)
 lonesynth.voices = linvar([0,1],32, start=Clock.mod(4))
-lonesynth.vol=1.2
+lonesynth.fade(fvol=1.2)
+
+Scale.default = Scale.chinese
+Scale.default = Scale.minorPentatonic
 
 kick1 >> play(
     "<{V.}x><v>",
@@ -160,6 +164,35 @@ kick1 >> play(
 )
 kick1.mpan(mrot(6))
 hh >> play("{[--]-.}", amp=3, rate=3, dur=.25).mpan(mrot(48))
+
+kick1.amplify=1
+kick1.dur=PRand([1,.5,.25], seed=2)
+kick1.dur=PRand([1,.5,.25,.25,.125], seed=2)
+
+kick1.dur=PRand([1,.5,.25,.25,.125,.125,.125], seed=2)
+
+kick1.rate = rate=PWhite(1.5,3) * linvar([1,2],[32,inf], start=Clock.mod(4))
+
+kick1.dur=PRand([.5,.25,.125,.125,.125], seed=2)
+
+kick1.rate = rate=PWhite(1.5,3) * linvar([1,2],[32,inf], start=Clock.mod(4))
+
+kick2 >> play(
+    "<{V.}x><v>",
+    lpf=800,
+    hpf=100,
+    amp=linvar([.5,1,.4,1],PRand(8,32)),
+    amplify=1,
+    rate=1,
+    output=2,
+)
+kick2.mpan(mrot(6))
+kick2.dur=PRand([.5,.25,.125,.125,.125], seed=2)
+
+kick2 >> play("V..V..V.", dur=.125)
+kick1 >> play("V..V..V.", dur=.125)
+kick1.rate = rate=PWhite(1.5,3) * linvar([1,2],[32,inf], start=Clock.mod(4))
+
 
 lonesynth.fade(16, fvol=1)
 

@@ -25,7 +25,6 @@ vibra.fadein(30, fvol=1)
 vibra.release = .6
 vibra.decay = .8
 vibra.span(srot(32), .2)
-
 vibra.release = linvar([.5, .8], [16,inf], start=Clock.mod(4))
 vibra.decay = linvar([.7, .3], [16,inf], start=Clock.mod(4))
 
@@ -122,16 +121,17 @@ liblip.fade(fvol=1)
 
 liblip.fadeout(32)
 
-kick1.degree="x.(x..).."
-
 kick2 >> play("V"+15*'.', dur=.25, amp=.8, lpf=300, sample=1, sdb=0, output=12)
 
-hh >> play(".-", rate=.3, room2=0, sdb=0, sample=3, amp=2, pan=linvar([-.8,.8], 48))
+kick1.degree="x.(x..).."
+
+hh >> play(".-", rate=.3, room2=0, sdb=0, sample=3, amp=2, pan=linvar([-.8,.8], 48)).fadein(3)
+hh.mpan(.5)
 
 hh.degree = ".[--]"
 
 hh.pan=P[-1,0,1,0,.5]*.8
-hh.mpan(.5)
+
 
 hh.degree = ".[--...]"
 bpm_to(130, 128)
@@ -180,9 +180,11 @@ clave >> play("c", dur=[1/3,2/3], rate=4, lpf=600, amp=2)
 kick3.degree = "X..X."
 kick3.amp=.8
 kick3.sample=6
-clave.mpan(mrot(16))
-clave.mpan(var([0,1,2,3],1))
 clave.mpan(.5)
+
+clave.mpan(mrot(16))
+
+clave.mpan(var([0,1,2,3],1))
 
 Scale.default = Pvar([Scale.chromatic, Scale.majorPentatonic, Scale.minor],8)
 
@@ -212,9 +214,11 @@ clave.fade(fvol=.8)
 shaker >> play("s..", dur=[.4,.3,.3], rate=[1,1.2,1], amp=3, sample=0)
 
 shaker.degree = "s.s"
+shaker.degree = "l.l"
+shaker.degree = "l"
 
-shaker.rate = linvar([1,4], 32, start=Clock.mod(4))
-shaker.room2 = .6
+shaker.rate = P[1,1.5,2]*linvar([.5,2], 32, start=Clock.mod(4))
+shaker.room2 = 0
 
 clave.amp=2.5
 
@@ -237,6 +241,16 @@ shaker.curr_players()
 liblip.fadeout(32)
 
 shaker.degree = "s{s.}"
+shaker.degree = "s{ss..[ss]}"
+
+shaker.rate = [1,1.2,1.5]
+
+shaker.rate = [1,1.2,1.5,1.8]
+
+shaker.rate = PRand([1,1.2,1.5,1.8], seed=7)
+clave.rate = PRand(2.5*P[1,1.2,1.5,1.8], seed=7)
+
+clave.degree = "{ccc[cc]}{cc..[cc]}"
 
 lonesynth.fadeout(16)
 marimba.fadeout(16)

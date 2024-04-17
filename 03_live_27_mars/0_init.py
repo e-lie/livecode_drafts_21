@@ -27,8 +27,6 @@ gone1 = gone
 gone2 = gone
 apad3 = apad
 wobble3 = wobble
-
-
 pad1 = Player()
 pad2 = Player()
 lonesynth = Player()
@@ -52,7 +50,6 @@ lonesynth = Player()
 clave = Player()
 shaker = Player()
 crash = Player()
-
 kicks = Group(kick1, kick2, kick3, kick4)
 percus = Group(kick1, kick2, kick3, kick4, hh, percu1, percu2, clave, shaker)
 percus = Group(kick1, kick2, kick3, kick4, bipclap, crash)
