@@ -4,7 +4,10 @@ Clock.latency = .5
 Clock.midi_nudge = -.232 # latency 2048/48000
 #
 mixer = instanciate("_mixer", "effects/fxstack_1_off")
+jules = instanciate("_jules", "effects/limiter4")
+mixerlimit = instanciate("_mixer", "effects/limiter4")
 duckless = instanciate("_duckless", "effects/kick_fx_1")
+duckelesslimit = instanciate("_duckless", "effects/limiter4")
 #
 gone = instanciate("chan1", "pads/gone_1q")
 bass303 = instanciate("chan2", "bass/bass303_1q")
